@@ -1,0 +1,16 @@
+{
+    "name": "com.vanhaodev.uimanager",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5ef5577e9636cb549b20f2e9a6959a23"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

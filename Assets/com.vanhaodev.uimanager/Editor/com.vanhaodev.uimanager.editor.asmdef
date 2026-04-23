@@ -1,0 +1,4 @@
+{
+	"name": "com.vanhaodev.uimanager.editor",
+	"references":[ "com.vanhaodev.uimanager" ]
+}
