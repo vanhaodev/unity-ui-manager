@@ -1,21 +1,12 @@
 using System;
-using UnityEngine;
-using DG.Tweening;
 
 namespace Vanhaodev.UIManager
 {
-    public abstract class BaseScreen : UIElement, IScreen
+    public abstract class BaseScreen : InteractableUI
     {
-        [Header("Screen Settings")]
-        [SerializeField] protected bool _fadeInFromRight = false;
-        [SerializeField] protected float _slideOffset = 100f;
-
-        protected RectTransform _rectTransform;
-
-        protected override void Awake()
+        protected override void OnCloseClicked()
         {
-            base.Awake();
-            _rectTransform = GetComponent<RectTransform>();
+            Manager?.CloseScreen();
         }
 
         public virtual void OnEnter(object data = null) { }
@@ -24,71 +15,20 @@ namespace Vanhaodev.UIManager
 
         public override void Show(Action onComplete = null)
         {
-            KillCurrentTween();
             gameObject.SetActive(true);
             IsVisible = true;
-
-            PlayShowAnimation(() =>
-            {
-                OnEnter();
-                onComplete?.Invoke();
-            });
+            OnShowAnimation(() => onComplete?.Invoke());
         }
 
-        public override void Hide(Action onComplete = null)
+        public override void Close(Action onComplete = null)
         {
-            KillCurrentTween();
             OnExit();
-
-            PlayHideAnimation(() =>
+            OnCloseAnimation(() =>
             {
                 IsVisible = false;
                 gameObject.SetActive(false);
                 onComplete?.Invoke();
             });
-        }
-
-        protected override void PlayShowAnimation(Action onComplete)
-        {
-            _canvasGroup.alpha = 0f;
-
-            if (_fadeInFromRight && _rectTransform != null)
-            {
-                var startPos = _rectTransform.anchoredPosition;
-                _rectTransform.anchoredPosition = new Vector2(startPos.x + _slideOffset, startPos.y);
-
-                DOTween.Sequence()
-                    .Join(_canvasGroup.DOFade(1f, _animDuration).SetEase(_showEase))
-                    .Join(_rectTransform.DOAnchorPosX(startPos.x, _animDuration).SetEase(_showEase))
-                    .SetUpdate(true)
-                    .OnComplete(() => onComplete?.Invoke());
-            }
-            else
-            {
-                base.PlayShowAnimation(onComplete);
-            }
-        }
-
-        protected override void PlayHideAnimation(Action onComplete)
-        {
-            if (_fadeInFromRight && _rectTransform != null)
-            {
-                var startPos = _rectTransform.anchoredPosition;
-
-                DOTween.Sequence()
-                    .Join(_canvasGroup.DOFade(0f, _animDuration * 0.8f).SetEase(_hideEase))
-                    .Join(_rectTransform.DOAnchorPosX(startPos.x - _slideOffset, _animDuration * 0.8f).SetEase(_hideEase))
-                    .SetUpdate(true)
-                    .OnComplete(() =>
-                    {
-                        _rectTransform.anchoredPosition = startPos;
-                        onComplete?.Invoke();
-                    });
-            }
-            else
-            {
-                base.PlayHideAnimation(onComplete);
-            }
         }
     }
 }
