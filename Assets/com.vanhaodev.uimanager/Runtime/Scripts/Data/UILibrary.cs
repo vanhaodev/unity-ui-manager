@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Vanhaodev.UIManager
+namespace vanhaodev.uimanager
 {
     [CreateAssetMenu(fileName = "UILibrary", menuName = "UI Manager/Library")]
     public class UILibrary : ScriptableObject

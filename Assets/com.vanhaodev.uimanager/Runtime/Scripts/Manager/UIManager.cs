@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Vanhaodev.UIManager
+namespace vanhaodev.uimanager
 {
     public partial class UIManager : MonoBehaviour
     {

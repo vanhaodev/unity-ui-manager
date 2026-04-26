@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Vanhaodev.UIManager
+namespace vanhaodev.uimanager
 {
     public partial class UIManager
     {

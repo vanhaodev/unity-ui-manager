@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace Vanhaodev.UIManager
+namespace vanhaodev.uimanager
 {
     public abstract class InteractableUI : UIElement
     {

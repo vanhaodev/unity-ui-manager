@@ -1,6 +1,6 @@
 using System;
 
-namespace Vanhaodev.UIManager
+namespace vanhaodev.uimanager
 {
     public abstract class BaseScreen : InteractableUI
     {

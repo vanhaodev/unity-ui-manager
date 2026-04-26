@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Vanhaodev.UIManager
+namespace vanhaodev.uimanager
 {
     public abstract class BasePopup : InteractableUI
     {

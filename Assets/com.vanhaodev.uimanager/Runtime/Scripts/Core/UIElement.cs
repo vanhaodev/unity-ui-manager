@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Vanhaodev.UIManager
+namespace vanhaodev.uimanager
 {
     public abstract class UIElement : MonoBehaviour
     {

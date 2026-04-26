@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Vanhaodev.UIManager
+namespace vanhaodev.uimanager
 {
     public partial class UIManager
     {
