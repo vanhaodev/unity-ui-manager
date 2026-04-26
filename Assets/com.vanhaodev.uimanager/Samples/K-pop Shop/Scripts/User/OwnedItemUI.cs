@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
     public class OwnedItemUI : MonoBehaviour
     {
         [Header("Texts")]
+        [SerializeField] private Image _imgThumbnail;
         [SerializeField] private TMP_Text _txtName;
         [SerializeField] private TMP_Text _txtDescription;
         [SerializeField] private TMP_Text _txtPrice;
@@ -24,6 +26,11 @@ namespace vanhaodev.uimanager.samples.kpopshop
         private void Awake()
         {
             _btnClick?.onClick.AddListener(OnClicked);
+        }
+
+        private void OnEnable()
+        {
+            ImageLoader.Load(this, _imgThumbnail, _item.ImageUrl);
         }
 
         private void OnDestroy()

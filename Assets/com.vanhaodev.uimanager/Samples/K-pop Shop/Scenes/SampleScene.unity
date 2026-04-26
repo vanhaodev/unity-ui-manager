@@ -369,7 +369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5ac61a0bc938f043ae44845293c5a4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: com.vanhaodev.uimanager.samples.kpopshop::vanhaodev.uimanager.samples.kpopshop.UserManager
-  _initialMoney: 100
+  _initialMoney: 500
 --- !u!4 &1047955386
 Transform:
   m_ObjectHideFlags: 0
