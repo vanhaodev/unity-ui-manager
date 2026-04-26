@@ -91,6 +91,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: com.vanhaodev.uimanager.samples.kpopshop::KpopShop.HomeScreen
   _btnClose: {fileID: 0}
   _btnShop: {fileID: 6600120607260410287}
+  _itemContainer: {fileID: 0}
+  _itemPrefab: {fileID: 0}
 --- !u!1 &3153294554627601754
 GameObject:
   m_ObjectHideFlags: 0

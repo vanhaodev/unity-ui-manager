@@ -59,19 +59,19 @@ namespace vanhaodev.uimanager.samples.kpopshop
             _items.Add(new ItemModel(
                 name: "NewJeans - New Jeans (1st EP)",
                 priceUsd: 19.99f,
-                imageUrl: "",
+                imageUrl: "https://cdn-images.dzcdn.net/images/cover/3bf93527469ed115356e2663e234c8f2/1900x1900-000000-80-0-0.jpg",
                 description: "NewJeans debut EP featuring Attention, Hype Boy, Cookie, and Hurt."
             ));
             _items.Add(new ItemModel(
                 name: "NewJeans - OMG",
                 priceUsd: 17.99f,
-                imageUrl: "",
+                imageUrl: "https://upload.wikimedia.org/wikipedia/vi/1/10/NewJeans_OMG_cover.jpg",
                 description: "Second single album with title tracks OMG and Ditto."
             ));
             _items.Add(new ItemModel(
                 name: "NewJeans - Get Up",
                 priceUsd: 21.99f,
-                imageUrl: "",
+                imageUrl: "https://upload.wikimedia.org/wikipedia/vi/6/62/Get_Up_NJ.jpg",
                 description: "Second EP including Super Shy, ETA, Cool With You, and New Jeans."
             ));
 
@@ -79,13 +79,13 @@ namespace vanhaodev.uimanager.samples.kpopshop
             _items.Add(new ItemModel(
                 name: "BabyMonster - BABYMONS7ER",
                 priceUsd: 18.99f,
-                imageUrl: "",
+                imageUrl: "https://upload.wikimedia.org/wikipedia/en/6/63/BabyMonster_-_BabyMons7er.jpg",
                 description: "BabyMonster's 1st mini album debut release."
             ));
             _items.Add(new ItemModel(
                 name: "BabyMonster - DRIP",
                 priceUsd: 22.99f,
-                imageUrl: "",
+                imageUrl: "https://colorcodedlyrics.com/wp-content/uploads/2024/10/BABYMONSTER-DRIP-AlbumArt.png",
                 description: "BabyMonster's 1st full album with title track DRIP."
             ));
         }

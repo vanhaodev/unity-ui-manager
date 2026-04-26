@@ -47,8 +47,12 @@ namespace vanhaodev.uimanager.samples.kpopshop
             if (item == null) return;
             if (_txtName != null) _txtName.text = item.Name;
             if (_txtPrice != null) _txtPrice.text = $"${item.PriceUsd:0.00}";
+        }
 
-            ImageLoader.Load(this, _imgThumbnail, item.ImageUrl);
+        public override void Show(Action onComplete = null)
+        {
+            base.Show(onComplete);
+            ImageLoader.Load(this, _imgThumbnail, _item.ImageUrl);
         }
 
         private void OnConfirmClicked()

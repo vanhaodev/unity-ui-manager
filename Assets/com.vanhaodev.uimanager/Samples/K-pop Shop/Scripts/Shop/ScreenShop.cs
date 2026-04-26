@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using Vanhaodev.UIManager;
@@ -23,8 +24,9 @@ namespace vanhaodev.uimanager.samples.kpopshop
             _shopManager = GetComponent<ShopManager>();
         }
 
-        public override void OnEnter(object data = null)
+        public override void Show(Action onComplete = null)
         {
+            base.Show(onComplete);
             Debug.Log("[ScreenShop] Entered");
 
             _userManager ??= FindObjectOfType<UserManager>();
@@ -59,6 +61,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
             foreach (var item in _shopManager.Items)
             {
                 var ui = Instantiate(_itemPrefab, _itemContainer);
+                ui.gameObject.SetActive(true);
                 ui.SetData(item);
             }
         }

@@ -19,7 +19,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
         {
             base.Awake();
             _btnShop?.onClick.AddListener(OnShopClicked);
-            _userManager = GetComponent<UserManager>();
+            _userManager ??= FindObjectOfType<UserManager>();
 
             FindObjectOfType<UIManager>()?.ShowPopup<PopupNotice>(p =>
             {

@@ -18,6 +18,11 @@ namespace vanhaodev.uimanager.samples.kpopshop
         public static void Load(MonoBehaviour host, Image target, string url)
         {
             if (target == null || host == null) return;
+            if (!host.gameObject.activeInHierarchy)
+            {
+                Debug.LogError("[ImageLoader] Host GameObject must be active to load image.");
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(url))
             {
