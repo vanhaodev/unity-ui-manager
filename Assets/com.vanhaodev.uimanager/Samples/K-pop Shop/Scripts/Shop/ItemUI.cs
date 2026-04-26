@@ -42,7 +42,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
 
             if (_txtName != null) _txtName.text = item.Name;
             if (_txtDescription != null) _txtDescription.text = item.Description;
-            if (_txtPrice != null) _txtPrice.text = $"${item.PriceUsd:0.00}";
+            if (_txtPrice != null) _txtPrice.text = $"<sprite=22> {item.PriceUsd:0.00}";
 
             ImageLoader.Load(this, _imgThumbnail, item.ImageUrl);
         }

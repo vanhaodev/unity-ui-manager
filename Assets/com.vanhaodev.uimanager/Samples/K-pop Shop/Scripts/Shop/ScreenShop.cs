@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using vanhaodev.uimanager;
+using vanhaodev.uimanager.effect;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {
@@ -22,6 +23,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
         {
             base.Awake();
             _shopManager = GetComponent<ShopManager>();
+            SetAnimation(new SlideAnimation());
         }
 
         public override void Show(Action onComplete = null)
@@ -69,7 +71,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
         private void RefreshMoney()
         {
             if (_txtMoney == null || _userManager?.Bag == null) return;
-            _txtMoney.text = $"${_userManager.Bag.MoneyUsd:0.00}";
+            _txtMoney.text = $"<sprite=22> {_userManager.Bag.MoneyUsd:0.00}";
         }
     }
 }

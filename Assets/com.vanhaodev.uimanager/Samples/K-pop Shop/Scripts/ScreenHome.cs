@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using vanhaodev.uimanager;
+using vanhaodev.uimanager.effect;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {
@@ -25,6 +26,8 @@ namespace vanhaodev.uimanager.samples.kpopshop
             {
                 p.SetData("Welcome!", "Welcome to <b>K-pop Shop</b> sample XD");
             });
+            
+            SetAnimation(new SlideAnimation());
         }
 
         protected override void OnDestroy()

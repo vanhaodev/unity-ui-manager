@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using vanhaodev.uimanager;
+using vanhaodev.uimanager.effect;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {
@@ -30,6 +31,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
             base.Awake();
             _btnConfirm?.onClick.AddListener(OnConfirmClicked);
             _btnCancel?.onClick.AddListener(OnCancelClicked);
+            SetAnimation(new FadeAnimation());
         }
 
         protected override void OnDestroy()
@@ -46,7 +48,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
 
             if (item == null) return;
             if (_txtName != null) _txtName.text = item.Name;
-            if (_txtPrice != null) _txtPrice.text = $"${item.PriceUsd:0.00}";
+            if (_txtPrice != null) _txtPrice.text = $"<sprite=22> {item.PriceUsd:0.00}";
         }
 
         public override void Show(Action onComplete = null)

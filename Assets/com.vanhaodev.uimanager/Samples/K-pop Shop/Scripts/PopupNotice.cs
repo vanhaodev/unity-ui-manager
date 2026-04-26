@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using vanhaodev.uimanager;
+using vanhaodev.uimanager.effect;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {
@@ -8,6 +9,12 @@ namespace vanhaodev.uimanager.samples.kpopshop
     {
         [SerializeField] private TMP_Text _txtTitle;
         [SerializeField] private TMP_Text _txtContent;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            SetAnimation(new FadeAnimation());
+        }
 
         public void SetData(string title, string content)
         {

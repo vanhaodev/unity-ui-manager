@@ -8,8 +8,9 @@ namespace vanhaodev.uimanager
     {
         [SerializeField] protected Button _btnClose;
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             _btnClose?.onClick.AddListener(OnCloseClicked);
         }
 
