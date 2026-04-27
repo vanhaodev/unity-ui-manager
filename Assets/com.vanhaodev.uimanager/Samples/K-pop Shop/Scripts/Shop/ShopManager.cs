@@ -23,7 +23,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
         {
             if (item == null) return;
 
-            _userManager ??= FindObjectOfType<UserManager>();
+            _userManager ??= FindFirstObjectByType<UserManager>();
             if (_userManager?.Bag == null) return;
 
             if (_userManager.Bag.MoneyUsd < item.PriceUsd)
@@ -37,7 +37,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
 
         private void ShowNotEnoughMoneyNotice(ItemModel item)
         {
-            _uiManager ??= FindObjectOfType<UIManager>();
+            _uiManager ??= FindFirstObjectByType<UIManager>();
             _uiManager?.ShowPopup<PopupNotice>(p =>
             {
                 p.SetData(

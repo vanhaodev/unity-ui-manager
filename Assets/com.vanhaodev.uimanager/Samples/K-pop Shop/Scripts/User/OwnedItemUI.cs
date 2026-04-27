@@ -52,7 +52,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
         {
             if (_item == null) return;
 
-            _uiManager ??= FindObjectOfType<UIManager>();
+            _uiManager ??= FindFirstObjectByType<UIManager>();
             _uiManager?.ShowPopup<PopupNotice>(p => p.SetData(_item.Name, _item.Description));
         }
     }

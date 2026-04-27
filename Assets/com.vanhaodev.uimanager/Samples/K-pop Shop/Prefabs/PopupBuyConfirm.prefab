@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 2507273993829798407}
   - component: {fileID: 124322227089811017}
   - component: {fileID: 4397026949423325846}
+  - component: {fileID: 7267924675569590814}
   m_Layer: 0
   m_Name: PopupBuyConfirm
   m_TagString: Untagged
@@ -201,6 +202,22 @@ MonoBehaviour:
   _txtPrice: {fileID: 1563421539473900631}
   _btnConfirm: {fileID: 2855688987753977072}
   _btnCancel: {fileID: 1943573507169989028}
+--- !u!114 &7267924675569590814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765632436130336568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d49eda7dbb048ecb621dc86abf76c6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.vanhaodev.uimanager::vanhaodev.uimanager.effect.templates.TempSlideAnimationMono
+  _fadePanel: {fileID: 2599934846866262311}
+  _tfWindow: {fileID: 6522855410887609806}
+  _fadeAlpha: 0.5
+  _duration: 0.3
 --- !u!1 &982361415805487046
 GameObject:
   m_ObjectHideFlags: 0

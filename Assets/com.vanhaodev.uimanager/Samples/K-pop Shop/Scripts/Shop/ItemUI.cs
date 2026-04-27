@@ -51,8 +51,8 @@ namespace vanhaodev.uimanager.samples.kpopshop
         {
             if (_item == null) return;
 
-            _uiManager ??= FindObjectOfType<UIManager>();
-            _shopManager ??= FindObjectOfType<ShopManager>();
+            _uiManager ??= FindFirstObjectByType<UIManager>();
+            _shopManager ??= FindFirstObjectByType<ShopManager>();
             _uiManager?.ShowPopup<PopupBuyConfirm>(p => p.SetData(_item, OnBuyConfirmed));
         }
 

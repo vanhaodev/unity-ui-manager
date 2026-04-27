@@ -2,8 +2,8 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using vanhaodev.uimanager;
 using vanhaodev.uimanager.effect;
+using vanhaodev.uimanager.effect.templates;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {
@@ -31,7 +31,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
             base.Awake();
             _btnConfirm?.onClick.AddListener(OnConfirmClicked);
             _btnCancel?.onClick.AddListener(OnCancelClicked);
-            SetAnimation(new FadeAnimation());
+            SetAnimation(GetComponent<IUIAnimation>());
         }
 
         protected override void OnDestroy()

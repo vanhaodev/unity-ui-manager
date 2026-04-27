@@ -1,8 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
-using vanhaodev.uimanager;
-using vanhaodev.uimanager.effect;
+using vanhaodev.uimanager.effect.templates;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {
@@ -23,7 +22,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
         {
             base.Awake();
             _shopManager = GetComponent<ShopManager>();
-            SetAnimation(new SlideAnimation());
+            SetAnimation(new TempSlideAnimation());
         }
 
         public override void Show(Action onComplete = null)
@@ -31,7 +30,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
             base.Show(onComplete);
             Debug.Log("[ScreenShop] Entered");
 
-            _userManager ??= FindObjectOfType<UserManager>();
+            _userManager ??= FindFirstObjectByType<UserManager>();
             if (_userManager != null)
                 _userManager.OnBagChanged += RefreshMoney;
 

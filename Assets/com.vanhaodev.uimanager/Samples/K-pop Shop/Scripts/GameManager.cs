@@ -9,7 +9,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
 
         private void Start()
         {
-            _uiManager = FindObjectOfType<UIManager>();
+            _uiManager = FindFirstObjectByType<UIManager>();
             ShowHomeScreen();
         }
 

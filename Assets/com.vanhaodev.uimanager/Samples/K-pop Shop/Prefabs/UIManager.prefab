@@ -156,6 +156,7 @@ GameObject:
   - component: {fileID: 3324952294883328456}
   - component: {fileID: 4878295004161541230}
   - component: {fileID: 3671310841915216057}
+  - component: {fileID: 1778439837997458092}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -206,6 +207,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a7e2d1ed3174fddbac83d63ba9b86bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: com.vanhaodev.uimanager.samples.kpopshop::vanhaodev.uimanager.samples.kpopshop.GameUI
+--- !u!114 &1778439837997458092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4665026356438310754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dcfbc3f58b24e8ab0433765156d6bbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.vanhaodev.uimanager.samples.kpopshop::vanhaodev.uimanager.samples.kpopshop.UIFeedbackSystem
 --- !u!1 &5359566582115005356
 GameObject:
   m_ObjectHideFlags: 0

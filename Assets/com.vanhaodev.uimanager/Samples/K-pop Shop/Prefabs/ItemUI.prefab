@@ -287,6 +287,8 @@ GameObject:
   - component: {fileID: 7366026249736934073}
   - component: {fileID: 5637941117399783672}
   - component: {fileID: 447508839282691668}
+  - component: {fileID: 5942380140750473261}
+  - component: {fileID: 5684618426925150052}
   m_Layer: 0
   m_Name: ItemUI
   m_TagString: Untagged
@@ -416,6 +418,33 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5942380140750473261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4782072905868975307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae5a8ffed4be47f1a3a2977ac9f43b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.vanhaodev.uimanager::vanhaodev.uimanager.effect.UIButton
+--- !u!114 &5684618426925150052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4782072905868975307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78aa3e1f374d44179e62f5eec3d7f834, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.vanhaodev.uimanager::vanhaodev.uimanager.effect.ButtonScaleAnimation
+  _hoverScale: 1.05
+  _pressedScale: 0.9
+  _duration: 0.1
 --- !u!1 &7587087822659416084
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using vanhaodev.uimanager;
 using vanhaodev.uimanager.effect;
+using vanhaodev.uimanager.effect.templates;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {
@@ -15,19 +17,13 @@ namespace vanhaodev.uimanager.samples.kpopshop
         [SerializeField] private OwnedItemUI _itemPrefab;
 
         private UserManager _userManager;
-
+        private bool _isShowWelcome = false;
         protected override void Awake()
         {
             base.Awake();
             _btnShop?.onClick.AddListener(OnShopClicked);
-            _userManager ??= FindObjectOfType<UserManager>();
-
-            FindObjectOfType<UIManager>()?.ShowPopup<PopupNotice>(p =>
-            {
-                p.SetData("Welcome!", "Welcome to <b>K-pop Shop</b> sample XD");
-            });
-            
-            SetAnimation(new SlideAnimation());
+            _userManager ??= FindFirstObjectByType<UserManager>();
+            SetAnimation(new TempSlideAnimation());
         }
 
         protected override void OnDestroy()
@@ -55,7 +51,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
 
         private void OnShopClicked()
         {
-            FindObjectOfType<UIManager>()?.ShowScreen<ScreenShop>();
+            FindFirstObjectByType<UIManager>()?.ShowScreen<ScreenShop>();
         }
 
         private void RefreshPurchasedItems()
@@ -72,6 +68,26 @@ namespace vanhaodev.uimanager.samples.kpopshop
                 var ui = Instantiate(_itemPrefab, _itemContainer);
                 ui.SetData(item);
             }
+        }
+
+        public override void Show(Action onComplete = null)
+        {
+            base.Show(() =>
+            {
+                if (_isShowWelcome == false)
+                {
+                    FindFirstObjectByType<UIManager>()?.ShowPopup<PopupNotice>(p =>
+                    {
+                        p.SetData("Welcome!", "Welcome to <b>K-pop Shop</b> sample XD" +
+                                              "\nThis is a sample to help you better understand my UI Manager, " +
+                                              "including built-in utilities for your game UI, " +
+                                              "designed to stay simple and not overly complex.\n");
+                    });
+                    _isShowWelcome = true;
+                }
+
+                onComplete?.Invoke();
+            });
         }
     }
 }
