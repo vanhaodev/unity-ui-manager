@@ -46,10 +46,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: com.vanhaodev.uimanager.samples.kpopshop::vanhaodev.uimanager.samples.kpopshop.SoundManager
   _sounds:
   - Key: PointerEnter
-    Clip: {fileID: 8300000, guid: f238934e1d456af4d8f36bf17f2ef943, type: 3}
+    Clip: {fileID: 8300000, guid: 9f6fef785ddc4004592c662e212a7550, type: 3}
   - Key: PointerDown
-    Clip: {fileID: 8300000, guid: 22edd9badef0df846b867af2630bfcad, type: 3}
+    Clip: {fileID: 8300000, guid: 6878781dd8c4d8147bf4e0d445207d79, type: 3}
   - Key: PlayShow
-    Clip: {fileID: 8300000, guid: f441dbc0d00e3d143b06944dff4809fd, type: 3}
+    Clip: {fileID: 8300000, guid: e9f652dfda7383e46a760e3eecbec19d, type: 3}
   - Key: PlayClose
-    Clip: {fileID: 8300000, guid: f441dbc0d00e3d143b06944dff4809fd, type: 3}
+    Clip: {fileID: 8300000, guid: b92d01ae3673bd84ba450345b4fef780, type: 3}

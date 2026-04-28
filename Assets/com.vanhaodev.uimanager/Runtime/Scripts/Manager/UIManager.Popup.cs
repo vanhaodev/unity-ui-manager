@@ -6,7 +6,7 @@ namespace vanhaodev.uimanager
 {
     public partial class UIManager
     {
-        private readonly Dictionary<Type, List<BasePopup>> _popupPool = new();
+        private readonly Dictionary<Type, BasePopup> _cachedPopups = new();
         private readonly List<BasePopup> _activePopups = new();
 
         public IReadOnlyList<BasePopup> ActivePopups => _activePopups;
@@ -15,9 +15,6 @@ namespace vanhaodev.uimanager
         public event Action<BasePopup> OnPopupOpened;
         public event Action<BasePopup> OnPopupClosed;
 
-        /// <summary>
-        /// Shows a popup. Creates new instance if needed, supports multiple instances of same type.
-        /// </summary>
         public T ShowPopup<T>(Action<T> onSetup = null, Action onComplete = null) where T : BasePopup
         {
             var popup = GetOrCreatePopup<T>();
@@ -58,6 +55,23 @@ namespace vanhaodev.uimanager
             popup.Close(() =>
             {
                 _activePopups.Remove(popup);
+
+                var type = popup.GetType();
+                bool hasSameTypeActive = _activePopups.Any(p => p.GetType() == type);
+
+                if (hasSameTypeActive)
+                {
+                    // Another same type still active → destroy this one
+                    if (_cachedPopups.TryGetValue(type, out var cached) && cached == popup)
+                        _cachedPopups.Remove(type);
+                    Destroy(popup.gameObject);
+                }
+                else
+                {
+                    // No same type active → keep as cached
+                    _cachedPopups[type] = popup;
+                }
+
                 onComplete?.Invoke();
                 OnPopupClosed?.Invoke(popup);
             });
@@ -95,9 +109,6 @@ namespace vanhaodev.uimanager
             }
         }
 
-        /// <summary>
-        /// Closes all popups of specific type.
-        /// </summary>
         public void CloseAllPopups<T>(Action onComplete = null) where T : BasePopup
         {
             var popupsToClose = _activePopups.Where(p => p is T).ToList();
@@ -126,9 +137,6 @@ namespace vanhaodev.uimanager
             return _activePopups.Any(p => p is T);
         }
 
-        /// <summary>
-        /// Returns count of active popups of specific type.
-        /// </summary>
         public int GetActivePopupCount<T>() where T : BasePopup
         {
             return _activePopups.Count(p => p is T);
@@ -138,15 +146,9 @@ namespace vanhaodev.uimanager
         {
             var type = typeof(T);
 
-            if (!_popupPool.TryGetValue(type, out var pool))
-            {
-                pool = new List<BasePopup>();
-                _popupPool[type] = pool;
-            }
-
-            var available = pool.FirstOrDefault(p => !_activePopups.Contains(p));
-            if (available != null)
-                return available as T;
+            // Reuse cached if not active
+            if (_cachedPopups.TryGetValue(type, out var cached) && !_activePopups.Contains(cached))
+                return cached as T;
 
             var prefab = _library?.GetPopupPrefab<T>();
             if (prefab == null)
@@ -158,18 +160,20 @@ namespace vanhaodev.uimanager
             var instance = Instantiate(prefab, _popupLayer);
             instance.gameObject.SetActive(false);
             instance.Manager = this;
-            pool.Add(instance);
+
+            // Cache if no existing cache for this type
+            if (!_cachedPopups.ContainsKey(type))
+                _cachedPopups[type] = instance;
+
             return instance;
         }
 
         private void ClearPopupCache()
         {
-            foreach (var pool in _popupPool.Values)
-            {
-                foreach (var popup in pool)
-                    if (popup != null) Destroy(popup.gameObject);
-            }
-            _popupPool.Clear();
+            foreach (var popup in _cachedPopups.Values)
+                if (popup != null) Destroy(popup.gameObject);
+
+            _cachedPopups.Clear();
             _activePopups.Clear();
         }
     }

@@ -11,15 +11,17 @@ namespace vanhaodev.uimanager
         public BaseScreen CurrentScreen => _currentScreen;
         public event Action<BaseScreen, BaseScreen> OnScreenChanged;
 
-        public T ShowScreen<T>(object data = null, Action onComplete = null) where T : BaseScreen
+        public T ShowScreen<T>(Action<T> onSetup = null, Action onComplete = null) where T : BaseScreen
         {
             var screen = GetOrCreateScreen<T>();
-            if (screen != null)
-                ShowScreenInternal(screen, data, onComplete);
+            if (screen == null) return null;
+
+            onSetup?.Invoke(screen);
+            ShowScreenInternal(screen, onComplete);
             return screen;
         }
 
-        private void ShowScreenInternal(BaseScreen screen, object data, Action onComplete)
+        private void ShowScreenInternal(BaseScreen screen, Action onComplete)
         {
             if (_currentScreen == screen)
             {
@@ -34,14 +36,14 @@ namespace vanhaodev.uimanager
             {
                 oldScreen.Close(() =>
                 {
-                    screen.OnEnter(data);
+                    screen.OnEnter();
                     screen.Show(onComplete);
                     OnScreenChanged?.Invoke(oldScreen, screen);
                 });
             }
             else
             {
-                screen.OnEnter(data);
+                screen.OnEnter();
                 screen.Show(onComplete);
                 OnScreenChanged?.Invoke(null, screen);
             }

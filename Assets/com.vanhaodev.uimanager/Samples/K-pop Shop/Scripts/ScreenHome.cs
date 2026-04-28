@@ -32,7 +32,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
             _btnShop?.onClick.RemoveListener(OnShopClicked);
         }
 
-        public override void OnEnter(object data = null)
+        public override void OnEnter()
         {
             Debug.Log("[ScreenHome] Entered");
 

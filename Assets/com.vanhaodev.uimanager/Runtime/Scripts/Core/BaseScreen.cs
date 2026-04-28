@@ -9,7 +9,7 @@ namespace vanhaodev.uimanager
             Manager?.CloseScreen();
         }
 
-        public virtual void OnEnter(object data = null) { }
+        public virtual void OnEnter() { }
 
         public virtual void OnExit() { }
 
