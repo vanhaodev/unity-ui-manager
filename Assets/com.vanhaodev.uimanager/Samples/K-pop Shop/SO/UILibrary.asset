@@ -18,3 +18,7 @@ MonoBehaviour:
   _popups:
   - {fileID: 2465099614327704749, guid: 88003d9af444d2d448d8391bd6a7f51a, type: 3}
   - {fileID: 4397026949423325846, guid: 47081e67ae1b922408dab1b18848fad6, type: 3}
+  _toasts:
+  - {fileID: 6793585994463436977, guid: bc91c7b5439468d4a893083ff55708ad, type: 3}
+  _maxConcurrentToasts: 3
+  _toastSpacing: 12

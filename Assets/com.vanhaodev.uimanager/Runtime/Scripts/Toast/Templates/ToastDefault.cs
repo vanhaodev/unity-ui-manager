@@ -1,0 +1,16 @@
+using vanhaodev.uimanager.effect.templates;
+
+namespace vanhaodev.uimanager.template
+{
+    /// <summary>
+    /// Default toast: message-only, slide-up from bottom.
+    /// </summary>
+    public class ToastDefault : BaseToast
+    {
+        protected override void Awake()
+        {
+            base.Awake();
+            SetToastAnimation(new TempToastSlideAnimation());
+        }
+    }
+}

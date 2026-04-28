@@ -9,9 +9,23 @@ namespace vanhaodev.uimanager
     {
         [SerializeField] private List<BaseScreen> _screens = new();
         [SerializeField] private List<BasePopup> _popups = new();
+        [SerializeField] private List<BaseToast> _toasts = new();
+
+        [Header("Toast Config")]
+        [Tooltip("Maximum number of toasts visible on screen at once. Exceeding will auto-dismiss the oldest.")]
+        [SerializeField] private int _maxConcurrentToasts = 3;
+        [Tooltip("Spacing between stacked toasts (px).")]
+        [SerializeField] private float _toastSpacing = 12f;
+        [Tooltip("Padding from screen edges. X = horizontal (left/right), Y = vertical (top/bottom).")]
+        [SerializeField] private Vector2 _toastPadding = new Vector2(24f, 48f);
 
         private Dictionary<Type, BaseScreen> _screenCache;
         private Dictionary<Type, BasePopup> _popupCache;
+        private Dictionary<Type, BaseToast> _toastCache;
+
+        public int MaxConcurrentToasts => _maxConcurrentToasts;
+        public float ToastSpacing => _toastSpacing;
+        public Vector2 ToastPadding => _toastPadding;
 
         private void OnEnable()
         {
@@ -22,18 +36,16 @@ namespace vanhaodev.uimanager
         {
             _screenCache = new Dictionary<Type, BaseScreen>();
             _popupCache = new Dictionary<Type, BasePopup>();
+            _toastCache = new Dictionary<Type, BaseToast>();
 
             foreach (var screen in _screens)
-            {
-                if (screen != null)
-                    _screenCache[screen.GetType()] = screen;
-            }
+                if (screen != null) _screenCache[screen.GetType()] = screen;
 
             foreach (var popup in _popups)
-            {
-                if (popup != null)
-                    _popupCache[popup.GetType()] = popup;
-            }
+                if (popup != null) _popupCache[popup.GetType()] = popup;
+
+            foreach (var toast in _toasts)
+                if (toast != null) _toastCache[toast.GetType()] = toast;
         }
 
         public T GetScreenPrefab<T>() where T : BaseScreen
@@ -46,6 +58,12 @@ namespace vanhaodev.uimanager
         {
             if (_popupCache == null) BuildCache();
             return _popupCache.TryGetValue(typeof(T), out var popup) ? popup as T : null;
+        }
+
+        public T GetToastPrefab<T>() where T : BaseToast
+        {
+            if (_toastCache == null) BuildCache();
+            return _toastCache.TryGetValue(typeof(T), out var toast) ? toast as T : null;
         }
     }
 }

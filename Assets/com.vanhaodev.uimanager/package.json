@@ -16,6 +16,7 @@
         "unity"
     ],
     "dependencies": {
-        "com.demigiant.dotween": "1.2.632"
+        "com.demigiant.dotween": "1.2.632",
+        "com.vanhaodev.objectpool": "1.0.0"
     }
 }

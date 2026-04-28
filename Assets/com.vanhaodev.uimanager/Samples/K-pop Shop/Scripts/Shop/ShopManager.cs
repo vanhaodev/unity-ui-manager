@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using vanhaodev.uimanager;
+using vanhaodev.uimanager.template;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {
@@ -32,7 +33,15 @@ namespace vanhaodev.uimanager.samples.kpopshop
                 return;
             }
 
-            _userManager.TryBuy(item);
+            if (_userManager.TryBuy(item))
+                ShowBuySuccessToast(item);
+        }
+
+        private void ShowBuySuccessToast(ItemModel item)
+        {
+            _uiManager ??= FindFirstObjectByType<UIManager>();
+            _uiManager?.ShowToast<ToastDefault>(ToastPosition.Bottom, t =>
+                t.SetMessage($"Bought <b>{item.Name}</b> successfully!"));
         }
 
         private void ShowNotEnoughMoneyNotice(ItemModel item)

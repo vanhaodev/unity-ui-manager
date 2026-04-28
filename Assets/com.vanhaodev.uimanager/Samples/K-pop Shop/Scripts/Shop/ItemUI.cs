@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using vanhaodev.uimanager;
+using vanhaodev.uimanager.template;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {
