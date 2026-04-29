@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
@@ -21,6 +22,12 @@ namespace vanhaodev.uimanager
         private RectTransform _container;
         private RectTransform _textRect;
         private CancellationTokenSource _cts;
+        private int _loopCount;
+        private int _targetLoops;
+        private Action _onComplete;
+
+        public int LoopCount => _loopCount;
+        public event Action<int> OnLoopComplete;
 
         private void Awake()
         {
@@ -54,7 +61,15 @@ namespace vanhaodev.uimanager
 
         public void Play()
         {
+            Play(0, null);
+        }
+
+        public void Play(int loops, Action onComplete)
+        {
             Stop();
+            _loopCount = 0;
+            _targetLoops = loops;
+            _onComplete = onComplete;
             _cts = new CancellationTokenSource();
             _ = RunMarqueeAsync(_cts.Token);
         }
@@ -121,6 +136,17 @@ namespace vanhaodev.uimanager
                 if (ct.IsCancellationRequested) break;
 
                 direction *= -1;
+
+                if (direction < 0)
+                {
+                    _loopCount++;
+                    OnLoopComplete?.Invoke(_loopCount);
+                    if (_targetLoops > 0 && _loopCount >= _targetLoops)
+                    {
+                        _onComplete?.Invoke();
+                        break;
+                    }
+                }
             }
         }
 
@@ -132,22 +158,23 @@ namespace vanhaodev.uimanager
 
             SetPosition(startX);
 
-            // Delay only on first iteration
             await Task.Delay(_delayMs, ct);
             if (ct.IsCancellationRequested) return;
 
             while (!ct.IsCancellationRequested && this != null && gameObject.activeInHierarchy)
             {
-                // Scroll left until completely exit
                 await MoveAsync(exitX, -1, ct);
                 if (ct.IsCancellationRequested) break;
 
-                // Instantly move to right side (off-screen)
-                SetPosition(enterX);
+                _loopCount++;
+                OnLoopComplete?.Invoke(_loopCount);
+                if (_targetLoops > 0 && _loopCount >= _targetLoops)
+                {
+                    _onComplete?.Invoke();
+                    break;
+                }
 
-                // Scroll left back to start (continuous, no delay)
-                await MoveAsync(startX, -1, ct);
-                if (ct.IsCancellationRequested) break;
+                SetPosition(enterX);
             }
         }
 

@@ -185,7 +185,7 @@ MonoBehaviour:
   _blockOverlay: {fileID: 5224479709208911672}
   _btnClose: {fileID: 6842456662575768388}
   _itemContainer: {fileID: 8267843306712225119}
-  _welcomeMarquee: {fileID: 8871542442269464653}
+  _welcomeMarquee: {fileID: 6154211708043279965}
   _itemPrefab: {fileID: 5637941117399783672, guid: 8aba2bff0979b444faa495638552aaa2, type: 3}
   _txtMoney: {fileID: 2447356372964099822}
 --- !u!114 &2058711333599031789
@@ -543,7 +543,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: com.vanhaodev.uimanager::vanhaodev.uimanager.MarqueeText
   _text: {fileID: 1420743755099740392}
-  _mode: 0
+  _mode: 1
   _speed: 200
   _delayMs: 1000
 --- !u!1 &4602259663006480752
@@ -856,10 +856,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Welcome to our K-pop shop, where music and style come together! Discover
+  m_text: Welcome to our K-pop shop, where music and style come together! Discover
     albums, photocards, lightsticks, and exclusive merch from your favorite idols.
-    Whether you\u2019re new or a longtime fan, we\u2019re happy to have you here.
-    Explore, enjoy, and celebrate your love for K-pop with u"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
