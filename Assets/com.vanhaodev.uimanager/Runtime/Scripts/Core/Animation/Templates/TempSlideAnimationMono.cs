@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,21 +12,25 @@ namespace vanhaodev.uimanager.effect.templates
         [SerializeField] private float _fadeAlpha = 0.5f;
         [SerializeField] private float _duration = 0.3f;
 
+        private CanvasGroup _windowCanvasGroup;
+
+        private void Awake()
+        {
+            if (_tfWindow != null && !_tfWindow.TryGetComponent(out _windowCanvasGroup))
+                _windowCanvasGroup = _tfWindow.gameObject.AddComponent<CanvasGroup>();
+        }
+
         public override void PlayShow(GameObject target, Action onComplete)
         {
             base.PlayShow(target, onComplete);
-            target.SetActive(true);
-            StartCoroutine(CoShow(onComplete));
-        }
-
-        private IEnumerator CoShow(Action onComplete)
-        {
-            yield return null;
 
             float height = _tfWindow.rect.height;
             float offset = height + 50f;
 
+            // Set initial state immediately to prevent jitter
             _tfWindow.anchoredPosition = new Vector2(0, -offset);
+            if (_windowCanvasGroup != null)
+                _windowCanvasGroup.alpha = 0f;
 
             if (_fadePanel != null)
             {
@@ -37,8 +40,6 @@ namespace vanhaodev.uimanager.effect.templates
                 _fadePanel.raycastTarget = true;
             }
 
-            yield return null;
-
             var seq = DOTween.Sequence();
 
             if (_fadePanel != null)
@@ -46,21 +47,18 @@ namespace vanhaodev.uimanager.effect.templates
 
             seq.Join(_tfWindow.DOAnchorPosY(0, _duration).SetEase(Ease.OutCubic));
 
+            if (_windowCanvasGroup != null)
+                seq.Join(_windowCanvasGroup.DOFade(1f, _duration * 0.5f));
+
             seq.OnComplete(() => onComplete?.Invoke());
         }
 
         public override void PlayClose(GameObject target, Action onComplete)
         {
             base.PlayClose(target, onComplete);
-            StartCoroutine(CoClose(target, onComplete));
-        }
 
-        private IEnumerator CoClose(GameObject target, Action onComplete)
-        {
             float height = _tfWindow.rect.height;
             float offset = height + 50f;
-
-            yield return null;
 
             var seq = DOTween.Sequence();
 
@@ -69,12 +67,14 @@ namespace vanhaodev.uimanager.effect.templates
 
             seq.Join(_tfWindow.DOAnchorPosY(-offset, _duration).SetEase(Ease.InCubic));
 
+            if (_windowCanvasGroup != null)
+                seq.Join(_windowCanvasGroup.DOFade(0f, _duration));
+
             seq.OnComplete(() =>
             {
                 if (_fadePanel != null)
                     _fadePanel.raycastTarget = false;
 
-                target.SetActive(false);
                 onComplete?.Invoke();
             });
         }

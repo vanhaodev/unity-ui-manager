@@ -34,8 +34,6 @@ namespace vanhaodev.uimanager.samples.kpopshop
 
         public override void OnEnter()
         {
-            Debug.Log("[ScreenHome] Entered");
-
             if (_userManager != null)
                 _userManager.OnBagChanged += RefreshPurchasedItems;
 
@@ -44,7 +42,6 @@ namespace vanhaodev.uimanager.samples.kpopshop
 
         public override void OnExit()
         {
-            Debug.Log("[ScreenHome] Exited");
             if (_userManager != null)
                 _userManager.OnBagChanged -= RefreshPurchasedItems;
         }

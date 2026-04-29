@@ -31,7 +31,7 @@ namespace vanhaodev.uimanager
         {
             public Type Type;
             public string Id;
-            public ToastPosition Position;
+            public ToastPositionType PositionType;
             public Action<BaseToast> Setup;
         }
 
@@ -39,14 +39,14 @@ namespace vanhaodev.uimanager
         /// Show a toast at the given position. Returns its id (use with HideToast to dismiss early).
         /// If concurrent count exceeds limit, oldest is auto-dismissed and new one takes its place.
         /// </summary>
-        public string ShowToast<T>(ToastPosition position = ToastPosition.Bottom, Action<T> onSetup = null) where T : BaseToast
+        public string ShowToast<T>(ToastPositionType positionType = ToastPositionType.Bottom, Action<T> onSetup = null) where T : BaseToast
         {
             var id = GenerateToastId();
             var type = typeof(T);
 
             Action<BaseToast> setupCast = onSetup != null ? (t => onSetup((T)t)) : null;
 
-            ShowToastInternal(type, id, position, setupCast);
+            ShowToastInternal(type, id, positionType, setupCast);
             return id;
         }
 
@@ -69,7 +69,7 @@ namespace vanhaodev.uimanager
                 HideToastInternal(t);
         }
 
-        private void ShowToastInternal(Type type, string id, ToastPosition position, Action<BaseToast> setup)
+        private void ShowToastInternal(Type type, string id, ToastPositionType positionType, Action<BaseToast> setup)
         {
             int max = _library != null ? _library.MaxConcurrentToasts : 3;
             if (max < 1) max = 1;
@@ -77,7 +77,7 @@ namespace vanhaodev.uimanager
             // If at capacity, queue and wait for an active toast to close (auto-close or manual)
             if (_activeToasts.Count >= max)
             {
-                _toastQueue.Enqueue(new PendingToast { Type = type, Id = id, Position = position, Setup = setup });
+                _toastQueue.Enqueue(new PendingToast { Type = type, Id = id, PositionType = positionType, Setup = setup });
                 return;
             }
 
@@ -85,8 +85,8 @@ namespace vanhaodev.uimanager
             if (toast == null) return;
 
             toast.ToastId = id;
-            toast.Position = position;
-            ApplyAnchorForPosition(toast.transform as RectTransform, position);
+            toast.PositionType = positionType;
+            ApplyAnchorForPosition(toast.transform as RectTransform, positionType);
             _toastById[id] = toast;
             _activeToasts.Add(toast);
 
@@ -125,7 +125,7 @@ namespace vanhaodev.uimanager
             while (_toastQueue.Count > 0 && _activeToasts.Count < max)
             {
                 var p = _toastQueue.Dequeue();
-                ShowToastInternal(p.Type, p.Id, p.Position, p.Setup);
+                ShowToastInternal(p.Type, p.Id, p.PositionType, p.Setup);
             }
         }
 
@@ -140,14 +140,14 @@ namespace vanhaodev.uimanager
             Vector2 padding = _library != null ? _library.ToastPadding : new Vector2(24f, 48f);
 
             // Group active toasts by position (preserve insertion order)
-            var byPos = new Dictionary<ToastPosition, List<BaseToast>>();
+            var byPos = new Dictionary<ToastPositionType, List<BaseToast>>();
             foreach (var t in _activeToasts)
             {
                 if (t == null) continue;
-                if (!byPos.TryGetValue(t.Position, out var list))
+                if (!byPos.TryGetValue(t.PositionType, out var list))
                 {
                     list = new List<BaseToast>();
-                    byPos[t.Position] = list;
+                    byPos[t.PositionType] = list;
                 }
                 list.Add(t);
             }
@@ -162,10 +162,10 @@ namespace vanhaodev.uimanager
         /// Top*: newest at top (y starts at -padding.y, decreases).
         /// X is set per-anchor (center=0, left=+padding.x, right=-padding.x relative to pivot).
         /// </summary>
-        private void LayoutGroup(ToastPosition pos, List<BaseToast> list, Vector2 padding, float spacing, BaseToast newcomer)
+        private void LayoutGroup(ToastPositionType pos, List<BaseToast> list, Vector2 padding, float spacing, BaseToast newcomer)
         {
-            bool isTop = pos == ToastPosition.Top || pos == ToastPosition.TopLeft || pos == ToastPosition.TopRight;
-            bool isCenter = pos == ToastPosition.Center;
+            bool isTop = pos == ToastPositionType.Top || pos == ToastPositionType.TopLeft || pos == ToastPositionType.TopRight;
+            bool isCenter = pos == ToastPositionType.Center;
             float dir = isTop ? -1f : 1f;
             float startY = isCenter ? 0f : dir * padding.y;
             float x = GetAnchoredX(pos, padding.x);
@@ -195,34 +195,34 @@ namespace vanhaodev.uimanager
             }
         }
 
-        private static float GetAnchoredX(ToastPosition pos, float paddingX)
+        private static float GetAnchoredX(ToastPositionType pos, float paddingX)
         {
             switch (pos)
             {
-                case ToastPosition.TopLeft:
-                case ToastPosition.BottomLeft:
+                case ToastPositionType.TopLeft:
+                case ToastPositionType.BottomLeft:
                     return paddingX;
-                case ToastPosition.TopRight:
-                case ToastPosition.BottomRight:
+                case ToastPositionType.TopRight:
+                case ToastPositionType.BottomRight:
                     return -paddingX;
                 default:
                     return 0f;
             }
         }
 
-        private static void ApplyAnchorForPosition(RectTransform rect, ToastPosition pos)
+        private static void ApplyAnchorForPosition(RectTransform rect, ToastPositionType pos)
         {
             if (rect == null) return;
 
             float ax, ay, px, py;
             switch (pos)
             {
-                case ToastPosition.Top:        ax = 0.5f; ay = 1f; px = 0.5f; py = 1f; break;
-                case ToastPosition.TopLeft:    ax = 0f;   ay = 1f; px = 0f;   py = 1f; break;
-                case ToastPosition.TopRight:   ax = 1f;   ay = 1f; px = 1f;   py = 1f; break;
-                case ToastPosition.BottomLeft: ax = 0f;   ay = 0f; px = 0f;   py = 0f; break;
-                case ToastPosition.BottomRight:ax = 1f;   ay = 0f; px = 1f;   py = 0f; break;
-                case ToastPosition.Center:     ax = 0.5f; ay = 0.5f; px = 0.5f; py = 0.5f; break;
+                case ToastPositionType.Top:        ax = 0.5f; ay = 1f; px = 0.5f; py = 1f; break;
+                case ToastPositionType.TopLeft:    ax = 0f;   ay = 1f; px = 0f;   py = 1f; break;
+                case ToastPositionType.TopRight:   ax = 1f;   ay = 1f; px = 1f;   py = 1f; break;
+                case ToastPositionType.BottomLeft: ax = 0f;   ay = 0f; px = 0f;   py = 0f; break;
+                case ToastPositionType.BottomRight:ax = 1f;   ay = 0f; px = 1f;   py = 0f; break;
+                case ToastPositionType.Center:     ax = 0.5f; ay = 0.5f; px = 0.5f; py = 0.5f; break;
                 default: /* Bottom */          ax = 0.5f; ay = 0f; px = 0.5f; py = 0f; break;
             }
 

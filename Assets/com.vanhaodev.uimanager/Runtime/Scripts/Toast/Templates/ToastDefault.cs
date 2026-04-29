@@ -10,7 +10,7 @@ namespace vanhaodev.uimanager.template
         protected override void Awake()
         {
             base.Awake();
-            SetToastAnimation(new TempToastSlideAnimation());
+            SetAnimation(new TempToastSlideAnimation());
         }
     }
 }

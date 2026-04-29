@@ -4,7 +4,7 @@ using vanhaodev.uimanager.events;
 
 namespace vanhaodev.uimanager.effect
 {
-    public abstract class ToastAnimationMonoBase : MonoBehaviour, IToastAnimation
+    public abstract class ToastAnimationMonoBase : MonoBehaviour, IUIAnimation
     {
         public string GetPlayShowKey() => "ToastPlayShow";
         public string GetPlayCloseKey() => "ToastPlayClose";

@@ -29,7 +29,6 @@ namespace vanhaodev.uimanager
         [Header("Toast - Swipe")]
         [SerializeField] protected float _swipeDismissThreshold = 150f;
 
-        private IToastAnimation _toastAnimation;
         private RectTransform _rect;
         private float _autoCloseTimer;
         private bool _autoCloseEnabled;
@@ -37,7 +36,7 @@ namespace vanhaodev.uimanager
         private bool _isDragging;
 
         public string ToastId { get; internal set; }
-        public ToastPosition Position { get; internal set; } = ToastPosition.Bottom;
+        public ToastPositionType PositionType { get; internal set; } = ToastPositionType.Bottom;
         public bool IsDismissing { get; private set; }
 
         protected override void Awake()
@@ -45,8 +44,6 @@ namespace vanhaodev.uimanager
             base.Awake();
             _rect = transform as RectTransform;
         }
-
-        public void SetToastAnimation(IToastAnimation animation) => _toastAnimation = animation;
 
         public virtual void SetMessage(string message)
         {
@@ -74,7 +71,7 @@ namespace vanhaodev.uimanager
             float maxW = layerW * _maxWidthRatio;
             float maxH = layerH * _maxHeightRatio;
 
-            _messageText.enableWordWrapping = true;
+            _messageText.textWrappingMode = TextWrappingModes.Normal;
             _messageText.overflowMode = TextOverflowModes.Overflow;
 
             // Step 1: unconstrained preferred width
@@ -105,11 +102,7 @@ namespace vanhaodev.uimanager
             IsDismissing = false;
             if (_canvasGroup != null) _canvasGroup.alpha = 1f;
             ResetAutoClose();
-
-            if (_toastAnimation != null)
-                _toastAnimation.PlayShow(gameObject, () => onComplete?.Invoke());
-            else
-                onComplete?.Invoke();
+            OnShowAnimation(() => onComplete?.Invoke());
         }
 
         public override void Close(Action onComplete = null)
@@ -118,21 +111,12 @@ namespace vanhaodev.uimanager
             IsDismissing = true;
             _autoCloseEnabled = false;
 
-            if (_toastAnimation != null)
-            {
-                _toastAnimation.PlayClose(gameObject, () =>
-                {
-                    IsVisible = false;
-                    gameObject.SetActive(false);
-                    onComplete?.Invoke();
-                });
-            }
-            else
+            OnCloseAnimation(() =>
             {
                 IsVisible = false;
                 gameObject.SetActive(false);
                 onComplete?.Invoke();
-            }
+            });
         }
 
         protected override void OnCloseClicked()

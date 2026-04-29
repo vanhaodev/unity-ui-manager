@@ -1,6 +1,6 @@
 namespace vanhaodev.uimanager
 {
-    public enum ToastPosition
+    public enum ToastPositionType
     {
         Top,
         TopLeft,

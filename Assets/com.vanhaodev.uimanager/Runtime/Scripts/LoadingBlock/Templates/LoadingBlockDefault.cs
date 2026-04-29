@@ -11,9 +11,9 @@ namespace vanhaodev.uimanager.templates
         protected override void Awake()
         {
             base.Awake();
-            var animation = GetComponent<ILoadingBlockAnimation>();
+            var animation = GetComponent<IUIAnimation>();
             if (animation != null)
-                SetLoadingBlockAnimation(animation);
+                SetAnimation(animation);
         }
 
         public void SetMessage(string message)

@@ -1,5 +1,4 @@
 using System;
-using DG.Tweening;
 using UnityEngine;
 using vanhaodev.uimanager.effect;
 
@@ -8,14 +7,14 @@ namespace vanhaodev.uimanager
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class UIElement : MonoBehaviour
     {
+        [SerializeField] protected GameObject _blockOverlay;
+
         protected CanvasGroup _canvasGroup;
         private IUIAnimation _animation;
         public virtual string Id => GetType().Name;
         public bool IsVisible { get; protected set; }
+        public bool IsAnimating { get; private set; }
 
-        /// <summary>
-        /// Reference to the manager that created this element. Set by UIManager on instantiation.
-        /// </summary>
         public UIManager Manager { get; internal set; }
 
         protected virtual void Awake()
@@ -50,6 +49,7 @@ namespace vanhaodev.uimanager
         {
             gameObject.SetActive(true);
             IsVisible = true;
+            SetBlockOverlay(false);
         }
 
         public void HideImmediate()
@@ -62,7 +62,15 @@ namespace vanhaodev.uimanager
         {
             if (_animation != null)
             {
-                _animation.PlayShow(gameObject, onComplete);
+                SetBlockOverlay(true);
+                IsAnimating = true;
+
+                _animation.PlayShow(gameObject, () =>
+                {
+                    IsAnimating = false;
+                    SetBlockOverlay(false);
+                    onComplete?.Invoke();
+                });
                 return;
             }
 
@@ -73,11 +81,25 @@ namespace vanhaodev.uimanager
         {
             if (_animation != null)
             {
-                _animation.PlayClose(gameObject, onComplete);
+                SetBlockOverlay(true);
+                IsAnimating = true;
+
+                _animation.PlayClose(gameObject, () =>
+                {
+                    IsAnimating = false;
+                    SetBlockOverlay(false);
+                    onComplete?.Invoke();
+                });
                 return;
             }
 
             onComplete?.Invoke();
+        }
+
+        protected void SetBlockOverlay(bool active)
+        {
+            if (_blockOverlay != null)
+                _blockOverlay.SetActive(active);
         }
     }
 }

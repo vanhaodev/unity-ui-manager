@@ -28,7 +28,6 @@ namespace vanhaodev.uimanager.samples.kpopshop
         public override void Show(Action onComplete = null)
         {
             base.Show(onComplete);
-            Debug.Log("[ScreenShop] Entered");
 
             _userManager ??= FindFirstObjectByType<UserManager>();
             if (_userManager != null)
@@ -45,7 +44,6 @@ namespace vanhaodev.uimanager.samples.kpopshop
 
         public override void OnExit()
         {
-            Debug.Log("[ScreenShop] Exited");
             if (_userManager != null)
                 _userManager.OnBagChanged -= RefreshMoney;
         }

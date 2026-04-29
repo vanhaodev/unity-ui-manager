@@ -40,7 +40,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
         private void ShowBuySuccessToast(ItemModel item)
         {
             _uiManager ??= FindFirstObjectByType<UIManager>();
-            _uiManager?.ShowToast<ToastDefault>(ToastPosition.Bottom, t =>
+            _uiManager?.ShowToast<ToastDefault>(ToastPositionType.Bottom, t =>
                 t.SetMessage($"Bought <b>{item.Name}</b> successfully!"));
         }
 

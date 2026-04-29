@@ -4,7 +4,7 @@ using vanhaodev.uimanager.events;
 
 namespace vanhaodev.uimanager.effect
 {
-    public abstract class LoadingBlockAnimationMonoBase : MonoBehaviour, ILoadingBlockAnimation
+    public abstract class LoadingBlockAnimationMonoBase : MonoBehaviour, IUIAnimation
     {
         public string GetPlayShowKey() => "LoadingBlockPlayShow";
         public string GetPlayCloseKey() => "LoadingBlockPlayClose";
