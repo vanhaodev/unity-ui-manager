@@ -80,6 +80,8 @@ namespace vanhaodev.uimanager.samples.kpopshop
                                               "including built-in utilities for your game UI, " +
                                               "designed to stay simple and not overly complex.\n");
                     });
+                    
+                    FindAnyObjectByType<SoundManager>()?.PlayLoop("MainTheme", 0.3f);
                     _isShowWelcome = true;
                 }
 

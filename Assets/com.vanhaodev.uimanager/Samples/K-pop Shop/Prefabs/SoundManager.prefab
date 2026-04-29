@@ -53,3 +53,5 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: e9f652dfda7383e46a760e3eecbec19d, type: 3}
   - Key: PlayClose
     Clip: {fileID: 8300000, guid: b92d01ae3673bd84ba450345b4fef780, type: 3}
+  - Key: MainTheme
+    Clip: {fileID: 8300000, guid: 745bb75e751c7b449aa054873f9cf729, type: 3}

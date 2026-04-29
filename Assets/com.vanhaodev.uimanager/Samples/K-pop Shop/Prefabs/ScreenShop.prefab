@@ -543,8 +543,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: com.vanhaodev.uimanager::vanhaodev.uimanager.MarqueeText
   _text: {fileID: 1420743755099740392}
-  _mode: 1
-  _speed: 200
+  _mode: 0
+  _speed: 230
   _delayMs: 1000
 --- !u!1 &4602259663006480752
 GameObject:

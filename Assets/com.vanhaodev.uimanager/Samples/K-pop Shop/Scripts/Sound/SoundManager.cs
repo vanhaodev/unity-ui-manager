@@ -44,5 +44,19 @@ namespace vanhaodev.uimanager.samples.kpopshop
                 _audioSource.PlayOneShot(clip);
             }
         }
+
+        public void PlayLoop(string key, float volume = 1)
+        {
+            if (string.IsNullOrEmpty(key))
+                return;
+
+            if (_soundMap.TryGetValue(key, out var clip))
+            {
+                _audioSource.clip = clip;
+                _audioSource.volume = volume;
+                _audioSource.loop = true;
+                _audioSource.Play();
+            }
+        }
     }
 }
