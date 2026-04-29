@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace vanhaodev.uimanager
 {
     public partial class UIManager
     {
+        [SerializeField] private Transform _screenLayer;
         private readonly Dictionary<Type, BaseScreen> _screenCache = new();
         private BaseScreen _currentScreen;
 

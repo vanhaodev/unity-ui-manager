@@ -20,5 +20,8 @@ MonoBehaviour:
   - {fileID: 4397026949423325846, guid: 47081e67ae1b922408dab1b18848fad6, type: 3}
   _toasts:
   - {fileID: 6793585994463436977, guid: bc91c7b5439468d4a893083ff55708ad, type: 3}
+  _loadingBlocks:
+  - {fileID: 8824626979889281580, guid: 702d2bd020243414fbea382daf4baec9, type: 3}
   _maxConcurrentToasts: 3
   _toastSpacing: 12
+  _toastPadding: {x: 24, y: 48}

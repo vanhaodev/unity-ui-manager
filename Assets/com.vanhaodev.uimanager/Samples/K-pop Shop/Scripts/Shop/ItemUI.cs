@@ -1,8 +1,10 @@
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using vanhaodev.uimanager;
 using vanhaodev.uimanager.template;
+using vanhaodev.uimanager.templates;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {
@@ -59,7 +61,12 @@ namespace vanhaodev.uimanager.samples.kpopshop
 
         private void OnBuyConfirmed(ItemModel item)
         {
-            _shopManager?.BuyItem(item);
+            _uiManager?.LoadingBlock<LoadingBlockDefault>(onSetup: (lb) => { lb.SetMessage("Buying..."); },
+                action: async () =>
+                {
+                    await Task.Delay(3500);
+                    _shopManager?.BuyItem(item);
+                });
         }
     }
 }

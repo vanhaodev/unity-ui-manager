@@ -192,10 +192,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6786cda7c6541754a9d447aa13308029, type: 3}
   m_Name: 
   m_EditorClassIdentifier: com.vanhaodev.uimanager::Vanhaodev.UIManager.UIManager
-  _screenLayer: {fileID: 4817498825500210274}
-  _popupLayer: {fileID: 3686195891501773696}
-  _toastLayer: {fileID: 2717035759421688797}
   _library: {fileID: 11400000, guid: 0c457ab9b7a7dba4ca0bec18c728e40c, type: 2}
+  _loadingBlockLayer: {fileID: 3953378992157702990}
+  _popupLayer: {fileID: 3686195891501773696}
+  _screenLayer: {fileID: 4817498825500210274}
+  _toastLayer: {fileID: 2717035759421688797}
 --- !u!114 &3671310841915216057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,6 +256,7 @@ RectTransform:
   - {fileID: 4817498825500210274}
   - {fileID: 3686195891501773696}
   - {fileID: 2717035759421688797}
+  - {fileID: 3953378992157702990}
   m_Father: {fileID: 3324952294883328456}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -325,6 +327,41 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &7805881635992709479
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3953378992157702990}
+  m_Layer: 0
+  m_Name: LoadingBlockLayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3953378992157702990
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7805881635992709479}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6851871686418885766}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &9059577386923949963
 GameObject:
   m_ObjectHideFlags: 0

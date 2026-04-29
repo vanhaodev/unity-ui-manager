@@ -8,6 +8,7 @@ namespace vanhaodev.uimanager
 {
     public partial class UIManager
     {
+        [SerializeField] private Transform _toastLayer;
         // One pool per toast type for reuse
         private readonly Dictionary<Type, ObjectPool<BaseToast>> _toastPools = new();
 

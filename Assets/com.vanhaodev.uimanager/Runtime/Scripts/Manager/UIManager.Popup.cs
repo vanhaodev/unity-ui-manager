@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace vanhaodev.uimanager
 {
     public partial class UIManager
     {
+        [SerializeField] private Transform _popupLayer;
         private readonly Dictionary<Type, BasePopup> _cachedPopups = new();
         private readonly List<BasePopup> _activePopups = new();
 
