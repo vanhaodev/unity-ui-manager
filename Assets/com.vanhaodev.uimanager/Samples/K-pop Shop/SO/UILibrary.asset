@@ -24,4 +24,4 @@ MonoBehaviour:
   - {fileID: 8824626979889281580, guid: 702d2bd020243414fbea382daf4baec9, type: 3}
   _maxConcurrentToasts: 3
   _toastSpacing: 12
-  _toastPadding: {x: 24, y: 48}
+  _toastPadding: {x: 24, y: 24}

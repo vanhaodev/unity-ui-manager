@@ -32,15 +32,22 @@ namespace vanhaodev.uimanager
         {
             gameObject.SetActive(true);
             IsVisible = true;
-            OnShowAnimation(() => onComplete?.Invoke());
+            OnShowStart();
+            OnShowAnimation(() =>
+            {
+                OnShowEnd();
+                onComplete?.Invoke();
+            });
         }
 
         public virtual void Close(Action onComplete = null)
         {
+            OnCloseStart();
             OnCloseAnimation(() =>
             {
                 IsVisible = false;
                 gameObject.SetActive(false);
+                OnCloseEnd();
                 onComplete?.Invoke();
             });
         }
@@ -50,12 +57,16 @@ namespace vanhaodev.uimanager
             gameObject.SetActive(true);
             IsVisible = true;
             SetBlockOverlay(false);
+            OnShowStart();
+            OnShowEnd();
         }
 
         public void HideImmediate()
         {
+            OnCloseStart();
             IsVisible = false;
             gameObject.SetActive(false);
+            OnCloseEnd();
         }
 
         protected virtual void OnShowAnimation(Action onComplete)
@@ -101,5 +112,10 @@ namespace vanhaodev.uimanager
             if (_blockOverlay != null)
                 _blockOverlay.SetActive(active);
         }
+
+        protected virtual void OnShowStart() { }
+        protected virtual void OnShowEnd() { }
+        protected virtual void OnCloseStart() { }
+        protected virtual void OnCloseEnd() { }
     }
 }

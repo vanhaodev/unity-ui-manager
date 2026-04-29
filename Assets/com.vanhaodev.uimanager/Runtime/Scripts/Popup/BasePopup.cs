@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,30 +34,18 @@ namespace vanhaodev.uimanager
             Manager?.ClosePopup(this);
         }
 
+        protected override void OnShowEnd()
+        {
+            OnPopupOpened();
+        }
+
+        protected override void OnCloseEnd()
+        {
+            OnPopupClosed();
+        }
+
         public virtual void OnPopupOpened() { }
 
         public virtual void OnPopupClosed() { }
-
-        public override void Show(Action onComplete = null)
-        {
-            gameObject.SetActive(true);
-            IsVisible = true;
-            OnShowAnimation(() =>
-            {
-                OnPopupOpened();
-                onComplete?.Invoke();
-            });
-        }
-
-        public override void Close(Action onComplete = null)
-        {
-            OnCloseAnimation(() =>
-            {
-                OnPopupClosed();
-                IsVisible = false;
-                gameObject.SetActive(false);
-                onComplete?.Invoke();
-            });
-        }
     }
 }

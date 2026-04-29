@@ -3,15 +3,9 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using vanhaodev.uimanager.effect;
 
 namespace vanhaodev.uimanager
 {
-    /// <summary>
-    /// Base toast UI element. Extend this for custom toast styles (info, success, error, action...).
-    /// Supports auto-dismiss after duration and swipe-to-dismiss horizontally.
-    /// </summary>
     public abstract class BaseToast : InteractableUI, IDragHandler, IBeginDragHandler, IEndDragHandler
     {
         [Header("Toast - Common")]
@@ -19,11 +13,8 @@ namespace vanhaodev.uimanager
         [SerializeField] protected float _defaultDuration = 2.5f;
 
         [Header("Toast - Layout")]
-        [Tooltip("Inner padding around the message text (X = horizontal, Y = vertical) in canvas units.")]
         [SerializeField] protected Vector2 _contentPadding = new Vector2(40f, 24f);
-        [Tooltip("Max width as a ratio of the toast layer width (0..1).")]
         [SerializeField, Range(0.1f, 1f)] protected float _maxWidthRatio = 0.8f;
-        [Tooltip("Max height as a ratio of the toast layer height (0..1).")]
         [SerializeField, Range(0.1f, 1f)] protected float _maxHeightRatio = 0.4f;
 
         [Header("Toast - Swipe")]
@@ -45,18 +36,31 @@ namespace vanhaodev.uimanager
             _rect = transform as RectTransform;
         }
 
+        protected override void OnShowStart()
+        {
+            IsDismissing = false;
+            if (_canvasGroup != null) _canvasGroup.alpha = 1f;
+            ResetAutoClose();
+        }
+
+        protected override void OnCloseStart()
+        {
+            IsDismissing = true;
+            _autoCloseEnabled = false;
+        }
+
+        public override void Close(Action onComplete = null)
+        {
+            if (IsDismissing) { onComplete?.Invoke(); return; }
+            base.Close(onComplete);
+        }
+
         public virtual void SetMessage(string message)
         {
             if (_messageText != null) _messageText.text = message;
             ResizeToContent();
         }
 
-        /// <summary>
-        /// Auto-fit toast size to message:
-        /// 1) Grow width up to maxWidthRatio * layerWidth.
-        /// 2) When width capped, grow height up to maxHeightRatio * layerHeight.
-        /// 3) When both maxed and content still overflows → ellipsis.
-        /// </summary>
         protected virtual void ResizeToContent()
         {
             if (_messageText == null) return;
@@ -74,18 +78,15 @@ namespace vanhaodev.uimanager
             _messageText.textWrappingMode = TextWrappingModes.Normal;
             _messageText.overflowMode = TextOverflowModes.Overflow;
 
-            // Step 1: unconstrained preferred width
             Vector2 prefSingleLine = _messageText.GetPreferredValues(_messageText.text);
             float targetW = Mathf.Min(prefSingleLine.x + _contentPadding.x, maxW);
 
-            // Step 2: preferred height when constrained to targetW
             float textW = Mathf.Max(1f, targetW - _contentPadding.x);
             Vector2 prefAtW = _messageText.GetPreferredValues(_messageText.text, textW, 0f);
             float targetH = Mathf.Min(prefAtW.y + _contentPadding.y, maxH);
 
             rect.sizeDelta = new Vector2(targetW, targetH);
 
-            // Step 3: ellipsis if both axes maxed and text still overflows
             bool overflows = prefAtW.y + _contentPadding.y > maxH + 0.5f;
             _messageText.overflowMode = overflows ? TextOverflowModes.Ellipsis : TextOverflowModes.Overflow;
         }
@@ -93,30 +94,6 @@ namespace vanhaodev.uimanager
         public void SetAutoCloseDuration(float seconds)
         {
             _defaultDuration = seconds;
-        }
-
-        public override void Show(Action onComplete = null)
-        {
-            gameObject.SetActive(true);
-            IsVisible = true;
-            IsDismissing = false;
-            if (_canvasGroup != null) _canvasGroup.alpha = 1f;
-            ResetAutoClose();
-            OnShowAnimation(() => onComplete?.Invoke());
-        }
-
-        public override void Close(Action onComplete = null)
-        {
-            if (IsDismissing) { onComplete?.Invoke(); return; }
-            IsDismissing = true;
-            _autoCloseEnabled = false;
-
-            OnCloseAnimation(() =>
-            {
-                IsVisible = false;
-                gameObject.SetActive(false);
-                onComplete?.Invoke();
-            });
         }
 
         protected override void OnCloseClicked()
@@ -141,7 +118,6 @@ namespace vanhaodev.uimanager
             }
         }
 
-        // Swipe-to-dismiss
         public virtual void OnBeginDrag(PointerEventData eventData)
         {
             if (IsDismissing || _rect == null) return;
@@ -168,7 +144,6 @@ namespace vanhaodev.uimanager
 
             if (dist >= _swipeDismissThreshold)
             {
-                // Swipe out fast then close
                 float dir = Mathf.Sign(_rect.anchoredPosition.x - _dragStartPos.x);
                 float targetX = _dragStartPos.x + dir * Screen.width;
                 _rect.DOAnchorPosX(targetX, 0.15f).SetEase(Ease.OutCubic);
@@ -177,7 +152,6 @@ namespace vanhaodev.uimanager
             }
             else
             {
-                // Snap back
                 _rect.DOAnchorPos(_dragStartPos, 0.2f).SetEase(Ease.OutCubic);
                 if (_canvasGroup != null) _canvasGroup.DOFade(1f, 0.2f);
             }

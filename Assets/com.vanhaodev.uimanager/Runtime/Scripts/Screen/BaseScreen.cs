@@ -1,5 +1,3 @@
-using System;
-
 namespace vanhaodev.uimanager
 {
     public abstract class BaseScreen : InteractableUI
@@ -9,26 +7,13 @@ namespace vanhaodev.uimanager
             Manager?.CloseScreen();
         }
 
+        protected override void OnCloseStart()
+        {
+            OnExit();
+        }
+
         public virtual void OnEnter() { }
 
         public virtual void OnExit() { }
-
-        public override void Show(Action onComplete = null)
-        {
-            gameObject.SetActive(true);
-            IsVisible = true;
-            OnShowAnimation(() => onComplete?.Invoke());
-        }
-
-        public override void Close(Action onComplete = null)
-        {
-            OnExit();
-            OnCloseAnimation(() =>
-            {
-                IsVisible = false;
-                gameObject.SetActive(false);
-                onComplete?.Invoke();
-            });
-        }
     }
 }

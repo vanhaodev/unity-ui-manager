@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using vanhaodev.uimanager.effect.templates;
@@ -9,6 +10,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
     {
         [Header("Item Spawning")]
         [SerializeField] private Transform _itemContainer;
+        [SerializeField] private Transform _welcomeMarquee;
         [SerializeField] private ItemUI _itemPrefab;
 
         [Header("Money")]
@@ -69,6 +71,18 @@ namespace vanhaodev.uimanager.samples.kpopshop
         {
             if (_txtMoney == null || _userManager?.Bag == null) return;
             _txtMoney.text = $"<sprite=22> {_userManager.Bag.MoneyUsd:0.00}";
+        }
+
+        protected override void OnShowEnd()
+        {
+            base.OnShowEnd();
+            
+            _welcomeMarquee.gameObject.SetActive(true);
+            Task.Run(async () =>
+            {
+                await Task.Delay(5000);
+                _welcomeMarquee.gameObject.SetActive(true);
+            });
         }
     }
 }
