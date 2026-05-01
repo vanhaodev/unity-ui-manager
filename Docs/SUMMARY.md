@@ -1,3 +1,3 @@
 # Table of contents
 
-* [Page](README.md)
+* [UI Manager Installation Guide](README.md)
