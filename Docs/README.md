@@ -19,7 +19,7 @@ DOTween handles animations.
 1. Open **Window → Asset Store**.
 2. Search for **DOTween**.
 3. Download and import it.
-4. Use version **1.2.825** or later.
+4. Use version **1.2.825** or higher.
 
 DOTween link: [https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676)
 {% endstep %}
@@ -27,10 +27,8 @@ DOTween link: [https://assetstore.unity.com/packages/tools/animation/dotween-hot
 {% step %}
 ### Install Object Pool
 
-Object Pool improves resource management.
-
-#### Option 1 — Git URL
-
+{% tabs %}
+{% tab title="Git URL" %}
 1. Open **Window → Package Manager**.
 2. Click the **+** icon.
 3. Select **Add package from git URL...**.
@@ -39,36 +37,39 @@ Object Pool improves resource management.
 ```
 https://github.com/vanhaodev/unity-object-pool.git?path=Exported/com.vanhaodev.objectpool#1.0.1
 ```
+{% endtab %}
 
-#### Option 2 — `manifest.json`
-
+{% tab title="manifest.json" %}
 1. Open `Packages/manifest.json`.
 2. Add this entry:
 
 ```json
 "com.vanhaodev.objectpool": "https://github.com/vanhaodev/unity-object-pool.git?path=Exported/com.vanhaodev.objectpool#1.0.1"
 ```
+{% endtab %}
+{% endtabs %}
 {% endstep %}
 
 {% step %}
 ### Install UI Manager
 
-#### Option 1 — Git URL
-
+{% tabs %}
+{% tab title="Git URL" %}
 Paste this URL into Package Manager:
 
-```
-https://github.com/vanhaodev/unity-ui-manager.git?path=Exported/com.vanhaodev.uimanager#1.0.0
-```
+<pre><code><strong>https://github.com/vanhaodev/unity-ui-manager.git?path=Exported/com.vanhaodev.uimanager#1.0.0
+</strong></code></pre>
+{% endtab %}
 
-#### Option 2 — `manifest.json`
-
+{% tab title="manifest.json" %}
 1. Open `Packages/manifest.json`.
 2. Add this entry:
 
 ```json
 "com.vanhaodev.uimanager": "https://github.com/vanhaodev/unity-ui-manager.git?path=Exported/com.vanhaodev.uimanager#1.0.0"
 ```
+{% endtab %}
+{% endtabs %}
 {% endstep %}
 
 {% step %}
