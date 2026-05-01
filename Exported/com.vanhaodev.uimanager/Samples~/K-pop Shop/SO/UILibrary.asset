@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb22b33649fe5c54ead046a2d1d151b2, type: 3}
+  m_Name: UILibrary
+  m_EditorClassIdentifier: com.vanhaodev.uimanager::Vanhaodev.UIManager.UILibrary
+  _screens:
+  - {fileID: 8489917402411472562, guid: 96e04273b1b85524aa6f2d290e5e4302, type: 3}
+  - {fileID: 9022466571211353256, guid: 35c915b3bd3047c4f8fff76f9ad3fa35, type: 3}
+  _popups:
+  - {fileID: 2465099614327704749, guid: 88003d9af444d2d448d8391bd6a7f51a, type: 3}
+  - {fileID: 4397026949423325846, guid: 47081e67ae1b922408dab1b18848fad6, type: 3}
+  _toasts:
+  - {fileID: 6793585994463436977, guid: bc91c7b5439468d4a893083ff55708ad, type: 3}
+  _loadingBlocks:
+  - {fileID: 8824626979889281580, guid: 702d2bd020243414fbea382daf4baec9, type: 3}
+  _maxConcurrentToasts: 3
+  _toastSpacing: 12
+  _toastPadding: {x: 24, y: 24}

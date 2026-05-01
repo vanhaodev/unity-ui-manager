@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6740275967251844672
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2121637055216043025}
+  - component: {fileID: 2727664485310579344}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2121637055216043025
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6740275967251844672}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2727664485310579344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6740275967251844672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c81060fd21a4bc3a54147ebe05022df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: com.vanhaodev.uimanager.samples.kpopshop::vanhaodev.uimanager.samples.kpopshop.SoundManager
+  _sounds:
+  - Key: PointerEnter
+    Clip: {fileID: 8300000, guid: 9f6fef785ddc4004592c662e212a7550, type: 3}
+  - Key: PointerDown
+    Clip: {fileID: 8300000, guid: 6878781dd8c4d8147bf4e0d445207d79, type: 3}
+  - Key: PlayShow
+    Clip: {fileID: 8300000, guid: e9f652dfda7383e46a760e3eecbec19d, type: 3}
+  - Key: PlayClose
+    Clip: {fileID: 8300000, guid: b92d01ae3673bd84ba450345b4fef780, type: 3}
+  - Key: MainTheme
+    Clip: {fileID: 8300000, guid: 745bb75e751c7b449aa054873f9cf729, type: 3}
