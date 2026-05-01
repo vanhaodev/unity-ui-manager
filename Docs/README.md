@@ -2,7 +2,7 @@
 description: Follow these steps to install UI Manager correctly.
 ---
 
-# UI Manager Installation Guide
+# Installation
 
 {% stepper %}
 {% step %}
@@ -27,7 +27,9 @@ DOTween handles animations.
 
 DOTween link:
 
-`https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676`
+```
+https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676
+```
 {% endstep %}
 
 {% step %}
