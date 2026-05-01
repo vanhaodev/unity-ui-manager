@@ -16,10 +16,7 @@ UI Manager requires **Unity 6** or later.
 
 DOTween handles animations.
 
-1. Use version **1.2.632**.
-2. Import to Unity
-
-DOTween link: [https://dotween.demigiant.com/downloads/DOTween\_1\_2\_632.zip](https://dotween.demigiant.com/downloads/DOTween_1_2_632.zip)
+DOTween link: [https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676​](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676%E2%80%8B)
 {% endstep %}
 
 {% step %}
