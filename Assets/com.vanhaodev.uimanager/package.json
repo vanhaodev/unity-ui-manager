@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "displayName": "UI Manager",
     "description": "Simple and lightweight UI management system for Unity. Handles Screens (full-screen views) and Popups (overlay dialogs) with smooth animations.",
-    "unity": "2021.3",
+    "unity": "6.000",
     "author": {
         "name": "Vanhaodev",
         "email": "vanhaodev@gmail.com"
