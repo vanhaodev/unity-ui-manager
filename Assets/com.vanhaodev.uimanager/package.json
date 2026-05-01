@@ -12,11 +12,16 @@
         "ui",
         "popup",
         "screen",
-        "manager",
-        "unity"
+        "unity",
+        "toast",
+        "loading",
+        "marquee"
     ],
-    "dependencies": {
-        "com.demigiant.dotween": "1.2.632",
-        "com.vanhaodev.objectpool": "1.0.0"
-    }
+    "samples": [
+        {
+            "displayName": "K-pop Shop",
+            "description": "Example scene demonstrating how to use the UI Manager.",
+            "path": "Samples~/K-pop Shop"
+        }
+    ]
 }
