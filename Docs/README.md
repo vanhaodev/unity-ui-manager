@@ -28,7 +28,7 @@ DOTween link: [https://assetstore.unity.com/packages/tools/animation/dotween-hot
 ### Install Object Pool
 
 {% tabs %}
-{% tab title="Git URL" %}
+{% tab title="Option 1 - Git URL" %}
 1. Open **Window → Package Manager**.
 2. Click the **+** icon.
 3. Select **Add package from git URL...**.
@@ -39,7 +39,7 @@ https://github.com/vanhaodev/unity-object-pool.git?path=Exported/com.vanhaodev.o
 ```
 {% endtab %}
 
-{% tab title="manifest.json" %}
+{% tab title="Option 2 - manifest.json" %}
 1. Open `Packages/manifest.json`.
 2. Add this entry:
 
@@ -54,14 +54,14 @@ https://github.com/vanhaodev/unity-object-pool.git?path=Exported/com.vanhaodev.o
 ### Install UI Manager
 
 {% tabs %}
-{% tab title="Git URL" %}
+{% tab title="Option 1 - Git URL" %}
 Paste this URL into Package Manager:
 
 <pre><code><strong>https://github.com/vanhaodev/unity-ui-manager.git?path=Exported/com.vanhaodev.uimanager#1.0.0
 </strong></code></pre>
 {% endtab %}
 
-{% tab title="manifest.json" %}
+{% tab title="Option 2 - manifest.json" %}
 1. Open `Packages/manifest.json`.
 2. Add this entry:
 
