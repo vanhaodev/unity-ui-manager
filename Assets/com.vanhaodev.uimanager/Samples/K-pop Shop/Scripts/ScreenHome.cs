@@ -73,14 +73,21 @@ namespace vanhaodev.uimanager.samples.kpopshop
             {
                 if (_isShowWelcome == false)
                 {
-                    FindFirstObjectByType<UIManager>()?.ShowPopup<PopupNotice>(p =>
+                    var ui = FindFirstObjectByType<UIManager>();
+
+                    ui?.ShowPopup<PopupNotice>(p =>
                     {
-                        p.SetData("Welcome!", "Welcome to <b>K-pop Shop</b> sample XD" +
-                                              "\nThis is a sample to help you better understand my UI Manager, " +
-                                              "including built-in utilities for your game UI, " +
-                                              "designed to stay simple and not overly complex.\n");
+                        p.SetData("Welcome!",
+                            "Welcome to <b>K-pop Shop</b> sample XD\n" +
+                            "This is a sample to help you better understand my UI Manager.");
                     });
-                    
+
+                    ui?.ShowPopup<PopupNotice>(p =>
+                    {
+                        p.SetData("Info",
+                            "Including built-in utilities for your game UI,\n" +
+                            "designed to stay simple and not overly complex.");
+                    });
                     FindAnyObjectByType<SoundManager>()?.PlayLoop("MainTheme", 0.3f);
                     _isShowWelcome = true;
                 }

@@ -30,6 +30,40 @@ namespace vanhaodev.uimanager
         private void ShowPopupInternal(BasePopup popup, Action onComplete)
         {
             _activePopups.Add(popup);
+
+            var type = popup.GetType();
+            BasePopup sameType = null;
+
+            // Iterate from top (end of list) to bottom
+            for (int i = _activePopups.Count - 1; i >= 0; i--)
+            {
+                var current = _activePopups[i];
+
+                // Skip the popup we just added (it is always the last element)
+                if (current == popup)
+                    continue;
+
+                // Find the nearest popup with the same type
+                if (current.GetType() == type)
+                {
+                    sameType = current;
+                    break;
+                }
+            }
+
+            if (sameType != null)
+            {
+                // Place new popup right below the existing same-type popup
+                // This ensures older popup stays visually on top
+                int index = sameType.transform.GetSiblingIndex();
+                popup.transform.SetSiblingIndex(index);
+            }
+            else
+            {
+                // Default behavior: newest popup goes on top
+                popup.transform.SetAsLastSibling();
+            }
+
             popup.Show(() =>
             {
                 onComplete?.Invoke();
