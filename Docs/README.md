@@ -83,5 +83,7 @@ Paste this URL into Package Manager:
 {% hint style="info" %}
 This sample shows the main UI Manager features and helps you get started faster.
 {% endhint %}
+
+<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 {% endstep %}
 {% endstepper %}
