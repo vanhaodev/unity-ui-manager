@@ -21,11 +21,7 @@ DOTween handles animations.
 3. Download and import it.
 4. Use version **1.2.825** or later.
 
-DOTween link:
-
-```
-https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676
-```
+DOTween link: [https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676)
 {% endstep %}
 
 {% step %}
