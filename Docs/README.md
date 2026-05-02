@@ -44,7 +44,7 @@ https://github.com/vanhaodev/unity-object-pool.git?path=Exported/com.vanhaodev.o
 {% tab title="Option 1 - Git URL" %}
 Paste this URL into Package Manager:
 
-<pre><code><strong>https://github.com/vanhaodev/unity-ui-manager.git?path=Exported/com.vanhaodev.uimanager#1.0.0
+<pre><code><strong>https://github.com/vanhaodev/unity-ui-manager.git?path=Exported/com.vanhaodev.uimanager#1.0.1
 </strong></code></pre>
 {% endtab %}
 
@@ -53,7 +53,7 @@ Paste this URL into Package Manager:
 2. Add this entry:
 
 ```json
-"com.vanhaodev.uimanager": "https://github.com/vanhaodev/unity-ui-manager.git?path=Exported/com.vanhaodev.uimanager#1.0.0"
+"com.vanhaodev.uimanager": "https://github.com/vanhaodev/unity-ui-manager.git?path=Exported/com.vanhaodev.uimanager#1.0.1"
 ```
 {% endtab %}
 {% endtabs %}
