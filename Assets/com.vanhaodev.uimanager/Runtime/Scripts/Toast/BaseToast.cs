@@ -1,8 +1,8 @@
 using System;
-using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using vanhaodev.uimanager.effect;
 
 namespace vanhaodev.uimanager
 {
@@ -136,24 +136,29 @@ namespace vanhaodev.uimanager
             }
         }
 
-        public virtual void OnEndDrag(PointerEventData eventData)
+        public virtual async void OnEndDrag(PointerEventData eventData)
         {
             if (IsDismissing || _rect == null) return;
             _isDragging = false;
             float dist = Mathf.Abs(_rect.anchoredPosition.x - _dragStartPos.x);
 
+            var ct = AnimationHelper.ResetToken(this);
+
             if (dist >= _swipeDismissThreshold)
             {
                 float dir = Mathf.Sign(_rect.anchoredPosition.x - _dragStartPos.x);
-                float targetX = _dragStartPos.x + dir * Screen.width;
-                _rect.DOAnchorPosX(targetX, 0.15f).SetEase(Ease.OutCubic);
-                if (_canvasGroup != null) _canvasGroup.DOFade(0f, 0.15f);
-                DOVirtual.DelayedCall(0.15f, () => Manager?.HideToast(ToastId));
+                var targetPos = new Vector2(_dragStartPos.x + dir * Screen.width, _rect.anchoredPosition.y);
+
+                AnimationHelper.AnchoredPos(_rect, targetPos, 0.15f, ct).Forget();
+                if (_canvasGroup != null) AnimationHelper.Alpha(_canvasGroup, 0f, 0.15f, ct).Forget();
+
+                await Awaitable.WaitForSecondsAsync(0.15f, ct);
+                if (!ct.IsCancellationRequested) Manager?.HideToast(ToastId);
             }
             else
             {
-                _rect.DOAnchorPos(_dragStartPos, 0.2f).SetEase(Ease.OutCubic);
-                if (_canvasGroup != null) _canvasGroup.DOFade(1f, 0.2f);
+                AnimationHelper.AnchoredPos(_rect, _dragStartPos, 0.2f, ct).Forget();
+                if (_canvasGroup != null) AnimationHelper.Alpha(_canvasGroup, 1f, 0.2f, ct).Forget();
             }
         }
     }

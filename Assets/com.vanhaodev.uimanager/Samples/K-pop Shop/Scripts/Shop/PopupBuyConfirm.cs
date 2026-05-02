@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using vanhaodev.uimanager.effect;
-using vanhaodev.uimanager.effect.templates;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {

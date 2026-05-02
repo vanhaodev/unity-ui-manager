@@ -213,7 +213,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 765632436130336568}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d49eda7dbb048ecb621dc86abf76c6d, type: 3}
+  m_Script: {fileID: 11500000, guid: e706999969f84164a620301c099f2881, type: 3}
   m_Name: 
   m_EditorClassIdentifier: com.vanhaodev.uimanager::vanhaodev.uimanager.effect.templates.TempSlideAnimationMono
   _fadePanel: {fileID: 2599934846866262311}

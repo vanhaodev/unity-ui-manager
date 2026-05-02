@@ -2,7 +2,6 @@
     "name": "com.vanhaodev.uimanager",
     "rootNamespace": "",
     "references": [
-        "GUID:5ef5577e9636cb549b20f2e9a6959a23",
         "GUID:2ffb18b1718fab04ba78cb5c14bbd018",
         "GUID:6055be8ebefd69e48b49212b09b47b2f"
     ],

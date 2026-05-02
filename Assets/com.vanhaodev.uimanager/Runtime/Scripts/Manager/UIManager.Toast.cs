@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using com.vanhaodev.objectpool;
-using DG.Tweening;
 using UnityEngine;
+using vanhaodev.uimanager.effect;
 
 namespace vanhaodev.uimanager
 {
@@ -187,8 +187,8 @@ namespace vanhaodev.uimanager
                 }
                 else
                 {
-                    rect.DOKill();
-                    rect.DOAnchorPos(target, 0.25f).SetEase(Ease.OutCubic);
+                    var ct = AnimationHelper.ResetToken(rect);
+                    AnimationHelper.AnchoredPos(rect, target, 0.25f, ct).Forget();
                 }
 
                 y += dir * (h + spacing);
@@ -305,7 +305,7 @@ namespace vanhaodev.uimanager
             var rect = t.transform as RectTransform;
             if (rect != null)
             {
-                rect.DOKill();
+                AnimationHelper.ResetToken(rect);
                 rect.anchoredPosition = Vector2.zero;
                 rect.localScale = Vector3.one;
                 rect.localRotation = Quaternion.identity;
@@ -313,7 +313,7 @@ namespace vanhaodev.uimanager
             var cg = t.GetComponent<CanvasGroup>();
             if (cg != null)
             {
-                cg.DOKill();
+                AnimationHelper.ResetToken(cg);
                 cg.alpha = 1f;
             }
         }
