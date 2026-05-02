@@ -1,8 +1,6 @@
 using TMPro;
 using UnityEngine;
-using vanhaodev.uimanager;
-using vanhaodev.uimanager.effect;
-using vanhaodev.uimanager.effect.templates;
+using vanhaodev.uimanager.samples.kpopshop.animation;
 
 namespace vanhaodev.uimanager.samples.kpopshop
 {

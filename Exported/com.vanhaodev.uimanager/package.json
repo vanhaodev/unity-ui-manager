@@ -8,6 +8,8 @@
         "name": "Vanhaodev",
         "email": "vanhaodev@gmail.com"
     },
+    "documentationUrl": "https://vanhaodev.gitbook.io/ui-manager",
+    "changelogUrl": "https://github.com/vanhaodev/unity-ui-manager/commits/1.0.1",
     "keywords": [
         "ui",
         "popup",

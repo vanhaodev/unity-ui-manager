@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1717472895521993692}
   - component: {fileID: 1752286914166634811}
   - component: {fileID: 8824626979889281580}
-  - component: {fileID: 5667655319330857115}
   m_Layer: 0
   m_Name: LoadingBlockDefault
   m_TagString: Untagged
@@ -103,24 +102,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb65c650d3d69c47b8e2b7d82a6de0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: com.vanhaodev.uimanager::vanhaodev.uimanager.templates.LoadingBlockDefault
+  _blockOverlay: {fileID: 0}
   _text: {fileID: 6823143723832644399}
---- !u!114 &5667655319330857115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2179385679807766555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc29b566cccfbb14e85bb88d5eaee797, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: com.vanhaodev.uimanager::vanhaodev.uimanager.effect.templates.TempLBAnimationDefault
-  _text: {fileID: 6823143723832644399}
-  _fadeDuration: 0.25
-  _waveSpeed: 1.5
-  _waveAmplitude: 3
-  _waveFrequency: 0.6
 --- !u!1 &5072585994683573580
 GameObject:
   m_ObjectHideFlags: 0

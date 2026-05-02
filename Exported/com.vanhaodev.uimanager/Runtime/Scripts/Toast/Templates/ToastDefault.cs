@@ -1,5 +1,3 @@
-using vanhaodev.uimanager.effect.templates;
-
 namespace vanhaodev.uimanager.template
 {
     /// <summary>
@@ -10,7 +8,7 @@ namespace vanhaodev.uimanager.template
         protected override void Awake()
         {
             base.Awake();
-            SetAnimation(new TempToastSlideAnimation());
+            // SetAnimation(new TempToastSlideAnimation());
         }
     }
 }

@@ -85,6 +85,7 @@ namespace vanhaodev.uimanager
                 return;
             }
 
+            ShowImmediate();
             onComplete?.Invoke();
         }
 
@@ -104,6 +105,7 @@ namespace vanhaodev.uimanager
                 return;
             }
 
+            HideImmediate();
             onComplete?.Invoke();
         }
 
