@@ -12,14 +12,6 @@ UI Manager requires **Unity 6** or later.
 {% endstep %}
 
 {% step %}
-### Install DOTween
-
-DOTween handles animations.
-
-DOTween link: [https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676​](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676%E2%80%8B)
-{% endstep %}
-
-{% step %}
 ### Install Object Pool
 
 {% tabs %}
