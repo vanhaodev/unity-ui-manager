@@ -115,6 +115,12 @@ namespace vanhaodev.uimanager
                 _blockOverlay.SetActive(active);
         }
 
+        /// <summary>
+        /// Redraws the UI from the current data state.
+        /// Call this from logic when the data changes; override in subclasses to update the UI.
+        /// </summary>
+        public virtual void Refresh() { }
+
         protected virtual void OnShowStart() { }
         protected virtual void OnShowEnd() { }
         protected virtual void OnCloseStart() { }
