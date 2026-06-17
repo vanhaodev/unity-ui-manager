@@ -12,6 +12,7 @@ namespace vanhaodev.uimanager
             ClearPopupCache();
             ClearToastCache();
             ClearLoadingBlockCache();
+            ClearFloatingTextCache();
         }
 
         public void SetLibrary(UILibrary library)
