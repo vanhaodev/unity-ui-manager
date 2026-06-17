@@ -28,3 +28,21 @@ MonoBehaviour:
   _maxConcurrentToasts: 3
   _toastSpacing: 12
   _toastPadding: {x: 24, y: 24}
+  _floatingShowInterval: 0.2
+  _floatingMaxPerSource: 20
+  _floatingScreenPadding: {x: 16, y: 16}
+  _flyoutIconPrefab: {fileID: 1647028716975773217, guid: 601f71555573dd84d818941931d400c9, type: 3}
+  _flyoutConfig:
+    DirectCountMax: 10
+    ScaledCountPer10: 2
+    MaxIcons: 28
+    BurstDuration: 0.15
+    FlightDuration: 0.5
+    ImpactDuration: 0.1
+    SpawnStagger: 0.02
+    BurstRadius: 80
+    BurstRandomness: 0.3
+    FlightCurveHeight: 100
+    FlightRandomness: 0.2
+    ShakeIntensity: 5
+    ShakeDuration: 0.1
