@@ -58,6 +58,15 @@ namespace vanhaodev.uimanager.samples.kpopshop
 
         private void OnConfirmClicked()
         {
+            // Float "[album cover] album name" up from the confirm button. The floating text lives in
+            // its own layer, so it keeps animating after this popup closes below.
+            if (_item != null && _btnConfirm != null)
+            {
+                var cover = _imgThumbnail != null ? _imgThumbnail.sprite : null;
+                Manager?.ShowFloatingText<FloatingTextAlbum>(
+                    t => t.SetAlbum(_item.Name, cover), _btnConfirm.transform);
+            }
+
             _onConfirm?.Invoke(_item);
             Manager?.ClosePopup(this);
         }
