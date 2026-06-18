@@ -28,5 +28,15 @@ namespace vanhaodev.uimanager.samples.kpopshop
             OnBagChanged?.Invoke();
             return true;
         }
+
+        /// <summary>
+        /// Add money to the bag. Fires OnBagChanged.
+        /// </summary>
+        public void AddMoney(float amount)
+        {
+            if (Bag == null || amount <= 0) return;
+            Bag.MoneyUsd += amount;
+            OnBagChanged?.Invoke();
+        }
     }
 }

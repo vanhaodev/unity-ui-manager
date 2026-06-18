@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using vanhaodev.uimanager.samples.kpopshop.animation;
@@ -9,6 +10,12 @@ namespace vanhaodev.uimanager.samples.kpopshop
     {
         [Header("Navigation")]
         [SerializeField] private Button _btnShop;
+
+        [Header("Money")]
+        [SerializeField] private TMP_Text _txtMoney;
+        [SerializeField] private FlyoutTarget _moneyFlyoutTarget;
+        [SerializeField] private Button _btnAddMoney;
+        [SerializeField] private Sprite _coinSprite;
 
         [Header("Purchased Items")]
         [SerializeField] private Transform _itemContainer;
@@ -36,6 +43,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
             base.Awake();
             _btnShop?.onClick.AddListener(OnShopClicked);
             _btnTestFloat?.onClick.AddListener(OnTestFloatClicked);
+            _btnAddMoney?.onClick.AddListener(OnAddMoneyClicked);
             _userManager ??= FindFirstObjectByType<UserManager>();
             SetAnimation(new TempSlideAnimation());
         }
@@ -45,21 +53,29 @@ namespace vanhaodev.uimanager.samples.kpopshop
             base.OnDestroy();
             _btnShop?.onClick.RemoveListener(OnShopClicked);
             _btnTestFloat?.onClick.RemoveListener(OnTestFloatClicked);
+            _btnAddMoney?.onClick.RemoveListener(OnAddMoneyClicked);
         }
 
         public override void OnEnter()
         {
             if (_userManager != null)
+            {
                 _userManager.OnBagChanged += RefreshPurchasedItems;
+                _userManager.OnBagChanged += RefreshMoney;
+            }
 
             RefreshPurchasedItems();
+            InitMoney();
             PreloadTestAlbumCovers();
         }
 
         public override void OnExit()
         {
             if (_userManager != null)
+            {
                 _userManager.OnBagChanged -= RefreshPurchasedItems;
+                _userManager.OnBagChanged -= RefreshMoney;
+            }
         }
 
         private void OnShopClicked()
@@ -85,6 +101,46 @@ namespace vanhaodev.uimanager.samples.kpopshop
             ImageLoader.LoadSprite(this, album.Url, cover =>
                 _uiManager?.ShowFloatingText<FloatingTextAlbum>(
                     t => t.SetAlbum(album.Name, cover), _btnTestFloat.transform));
+        }
+
+        private void OnAddMoneyClicked()
+        {
+            if (_btnAddMoney == null || _userManager == null) return;
+            _uiManager ??= FindFirstObjectByType<UIManager>();
+
+            const float addAmountUsd = 10f;
+            const int addAmountCents = (int)(addAmountUsd * 100); // 1000 cents
+
+            // Play flyout effect from button to money field
+            // AddMoney is called AFTER flyout completes to avoid interfering with lerp
+            if (_uiManager != null && _coinSprite != null)
+            {
+                _uiManager.PlayFlyout(
+                    sourceWorldPos: _btnAddMoney.transform.position,
+                    targetKey: "money",
+                    amount: addAmountCents,
+                    icon: _coinSprite,
+                    onComplete: () => _userManager.AddMoney(addAmountUsd)
+                );
+            }
+            else
+            {
+                _userManager.AddMoney(addAmountUsd);
+            }
+        }
+
+        private void RefreshMoney()
+        {
+            // Flyout handles the visual update via NotifyIconArrived
+            // This just ensures bag state is in sync (called by OnBagChanged)
+        }
+
+        private void InitMoney()
+        {
+            if (_userManager?.Bag == null) return;
+
+            // Initial sync - set both display and target
+            _moneyFlyoutTarget?.SetValue((long)(_userManager.Bag.MoneyUsd * 100));
         }
 
         private void RefreshPurchasedItems()

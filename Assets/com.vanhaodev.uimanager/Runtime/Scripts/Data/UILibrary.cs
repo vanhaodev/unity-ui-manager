@@ -32,6 +32,13 @@ namespace vanhaodev.uimanager
         [Tooltip("Keep floating texts this far (px) inside the screen edges. X = left/right, Y = top/bottom.")]
         [SerializeField] private Vector2 _floatingScreenPadding = new Vector2(16f, 16f);
 
+        [Space(8)]
+        [Header("── Flyout Effect Config ──")]
+        [Tooltip("Default flyout icon prefab (requires Image + CanvasGroup + FlyoutIcon).")]
+        [SerializeField] private FlyoutIcon _flyoutIconPrefab;
+        [Tooltip("Flyout effect animation and behavior settings.")]
+        [SerializeField] private FlyoutConfig _flyoutConfig = new();
+
         private Dictionary<Type, BaseScreen> _screenCache;
         private Dictionary<Type, BasePopup> _popupCache;
         private Dictionary<Type, BaseToast> _toastCache;
@@ -44,6 +51,8 @@ namespace vanhaodev.uimanager
         public float FloatingShowInterval => _floatingShowInterval;
         public int FloatingMaxPerSource => _floatingMaxPerSource;
         public Vector2 FloatingScreenPadding => _floatingScreenPadding;
+        public FlyoutIcon FlyoutIconPrefab => _flyoutIconPrefab;
+        public FlyoutConfig FlyoutConfig => _flyoutConfig;
 
         private void OnEnable()
         {

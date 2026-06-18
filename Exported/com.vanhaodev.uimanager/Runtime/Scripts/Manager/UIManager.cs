@@ -6,6 +6,8 @@ namespace vanhaodev.uimanager
     {
         [SerializeField] private UILibrary _library;
 
+        public UILibrary Library => _library;
+
         public void ClearCache()
         {
             ClearScreenCache();
@@ -13,6 +15,7 @@ namespace vanhaodev.uimanager
             ClearToastCache();
             ClearLoadingBlockCache();
             ClearFloatingTextCache();
+            ClearFlyoutCache();
         }
 
         public void SetLibrary(UILibrary library)
