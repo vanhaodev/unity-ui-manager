@@ -17,6 +17,9 @@ namespace vanhaodev.uimanager.samples.kpopshop
         [SerializeField] private Button _btnAddMoney;
         [SerializeField] private Sprite _coinSprite;
 
+        // Showcase toggle: flips each click to alternate the two count-up timings (see OnAddMoneyClicked).
+        private bool _countPerCoin;
+
         [Header("Purchased Items")]
         [SerializeField] private Transform _itemContainer;
         [SerializeField] private OwnedItemUI _itemPrefab;
@@ -64,6 +67,14 @@ namespace vanhaodev.uimanager.samples.kpopshop
                 _userManager.OnBagChanged += RefreshMoney;
             }
 
+            // Manually register the flyout target — the library no longer auto-discovers the manager.
+            _uiManager ??= FindFirstObjectByType<UIManager>();
+            if (_moneyFlyoutTarget != null)
+            {
+                _moneyFlyoutTarget.Register(_uiManager);
+                _moneyFlyoutTarget.OnIconArrived += OnCoinArrived;
+            }
+
             RefreshPurchasedItems();
             InitMoney();
             PreloadTestAlbumCovers();
@@ -75,6 +86,12 @@ namespace vanhaodev.uimanager.samples.kpopshop
             {
                 _userManager.OnBagChanged -= RefreshPurchasedItems;
                 _userManager.OnBagChanged -= RefreshMoney;
+            }
+
+            if (_moneyFlyoutTarget != null)
+            {
+                _moneyFlyoutTarget.OnIconArrived -= OnCoinArrived;
+                _moneyFlyoutTarget.Unregister();
             }
         }
 
@@ -111,36 +128,74 @@ namespace vanhaodev.uimanager.samples.kpopshop
             const float addAmountUsd = 10f;
             const int addAmountCents = (int)(addAmountUsd * 100); // 1000 cents
 
-            // Play flyout effect from button to money field
-            // AddMoney is called AFTER flyout completes to avoid interfering with lerp
-            if (_uiManager != null && _coinSprite != null)
-            {
-                _uiManager.PlayFlyout(
-                    sourceWorldPos: _btnAddMoney.transform.position,
-                    targetKey: "money",
-                    amount: addAmountCents,
-                    icon: _coinSprite,
-                    onComplete: () => _userManager.AddMoney(addAmountUsd)
-                );
-            }
-            else
+            // No flyout available: just add money.
+            if (_uiManager == null || _coinSprite == null)
             {
                 _userManager.AddMoney(addAmountUsd);
+                return;
             }
+
+            // Showcase: alternate the two count-up timings on each click.
+            //  false -> "land then count": coins fly, all land, THEN the number counts up.
+            //  true  -> "count per coin": the number ticks up as each coin lands (see OnCoinArrived).
+            _countPerCoin = !_countPerCoin;
+
+            // AddMoney persists to the bag in both modes. In per-coin mode the display has already
+            // reached the new total by the time coins land, so the resulting SetTargetValue is a no-op.
+            _uiManager.PlayFlyout(
+                sourceWorldPos: _btnAddMoney.transform.position,
+                targetKey: "money",
+                amount: addAmountCents,
+                icon: _coinSprite,
+                onComplete: () => _userManager.AddMoney(addAmountUsd)
+            );
+        }
+
+        // Per-coin count-up: nudge the displayed total by each coin's value as it lands,
+        // so the number rises in lockstep with the coins. Inactive in "land then count" mode.
+        private void OnCoinArrived(int valuePerIcon)
+        {
+            if (!_countPerCoin || _moneyFlyoutTarget == null) return;
+            _moneyFlyoutTarget.SetTargetValue(_moneyFlyoutTarget.CurrentTargetValue + valuePerIcon);
         }
 
         private void RefreshMoney()
         {
-            // Flyout handles the visual update via NotifyIconArrived
-            // This just ensures bag state is in sync (called by OnBagChanged)
+            // App owns the number: drive the count-up whenever the bag changes.
+            // The flyout icons are purely visual (fly + shake); they no longer touch the value.
+            if (_userManager?.Bag == null) return;
+            _moneyFlyoutTarget?.SetTargetValue((long)(_userManager.Bag.MoneyUsd * 100));
         }
 
         private void InitMoney()
         {
             if (_userManager?.Bag == null) return;
 
+            // Abbreviated money display (e.g. 12600 -> "12.6k")
+            if (_moneyFlyoutTarget != null)
+                _moneyFlyoutTarget.Formatter = FormatMoney;
+
             // Initial sync - set both display and target
             _moneyFlyoutTarget?.SetValue((long)(_userManager.Bag.MoneyUsd * 100));
+        }
+
+        /// <summary>Short money format: 950 -> "950", 12600 -> "12.6k", 3_400_000 -> "3.4m".</summary>
+        private static string FormatMoney(long value)
+        {
+            if (value < 0) return "-" + FormatMoney(-value);
+            if (value < 1_000) return value.ToString();
+            if (value < 1_000_000) return Abbrev(value, 1_000, 'k');
+            if (value < 1_000_000_000) return Abbrev(value, 1_000_000, 'm');
+            return Abbrev(value, 1_000_000_000, 'b');
+        }
+
+        // One decimal, trailing ".0" trimmed: 12600 -> "12.6k", 12000 -> "12k".
+        private static string Abbrev(long value, long unit, char suffix)
+        {
+            var scaled = value / (double)unit;
+            var text = scaled.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture);
+            if (text.EndsWith(".0")) text = text[..^2];
+            return text + suffix;
         }
 
         private void RefreshPurchasedItems()

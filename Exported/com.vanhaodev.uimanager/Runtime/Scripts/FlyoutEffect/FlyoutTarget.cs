@@ -7,7 +7,8 @@ namespace vanhaodev.uimanager
 {
     /// <summary>
     /// Attach to a UI field (e.g., coin counter) to register as a flyout target.
-    /// Handles shake animation and optional number lerp when icons arrive.
+    /// Handles the arrival shake. The displayed number is app-driven via
+    /// SetValue/SetTargetValue and can be formatted through <see cref="Formatter"/>.
     /// </summary>
     [DisallowMultipleComponent]
     public class FlyoutTarget : MonoBehaviour
@@ -34,6 +35,14 @@ namespace vanhaodev.uimanager
         /// <summary>Called when all icons in a batch have arrived.</summary>
         public event Action OnBatchComplete;
 
+        /// <summary>
+        /// Optional formatter for the displayed value — supports any style the game needs
+        /// (e.g. "123456789", "1.000.000", "1k2", "1b3", "∞"). Null shows the raw number.
+        /// </summary>
+        public Func<long, string> Formatter;
+
+        private string Format(long value) => Formatter?.Invoke(value) ?? value.ToString();
+
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
@@ -46,19 +55,34 @@ namespace vanhaodev.uimanager
             _originalAnchoredPos = _rectTransform.anchoredPosition;
         }
 
-        private void OnEnable()
-        {
-            _manager = FindAnyObjectByType<UIManager>();
-            if (_manager != null)
-                _manager.FlyoutRegistry.Register(_key, this);
-        }
-
         private void OnDisable()
         {
-            if (_manager != null)
-                _manager.FlyoutRegistry.Unregister(_key);
-
             AnimationHelper.CancelAndRemove(this);
+        }
+
+        private void OnDestroy()
+        {
+            // Safety net so a destroyed target never lingers as a dead entry in the registry.
+            Unregister();
+        }
+
+        /// <summary>
+        /// Register this target with the given <see cref="UIManager"/> under its <see cref="Key"/>.
+        /// Call this yourself (e.g. from a screen's setup) — the library does not auto-discover the
+        /// manager. The manager reference is also required for the arrival shake.
+        /// </summary>
+        public void Register(UIManager manager)
+        {
+            if (manager == null) return;
+            _manager = manager;
+            _manager.FlyoutRegistry.Register(_key, this);
+        }
+
+        /// <summary>Remove this target from its manager's registry. Safe to call when not registered.</summary>
+        public void Unregister()
+        {
+            if (_manager == null) return;
+            _manager.FlyoutRegistry.Unregister(_key);
             _manager = null;
         }
 
@@ -70,7 +94,7 @@ namespace vanhaodev.uimanager
             _displayValue = value;
             _targetValue = value;
             if (_amountText != null)
-                _amountText.text = value.ToString();
+                _amountText.text = Format(value);
         }
 
         /// <summary>
@@ -85,41 +109,21 @@ namespace vanhaodev.uimanager
         }
 
         /// <summary>
-        /// Merge additional amount into current flyout (no new icons).
-        /// Used when spam-clicking to avoid visual clutter.
-        /// </summary>
-        internal void MergeAmount(int amount)
-        {
-            _targetValue += amount;
-            // Lerp continues naturally if already running
-            if (!_isLerping && _amountText != null)
-                LerpValueAsync().Forget();
-        }
-
-        /// <summary>
-        /// Called by flyout system when an icon arrives.
-        /// Adds value and triggers shake + lerp.
+        /// Called by the flyout system when an icon arrives. Triggers the shake only;
+        /// the number is owned by the app — drive it via SetTargetValue/SetValue.
         /// </summary>
         internal void NotifyIconArrived(int valuePerIcon)
         {
             OnIconArrived?.Invoke(valuePerIcon);
-
-            _targetValue += valuePerIcon;
-            if (!_isLerping && _amountText != null)
-                LerpValueAsync().Forget();
-
             ShakeAsync().Forget();
         }
 
         /// <summary>
-        /// Called when all icons in a batch have arrived.
-        /// Ensures target value is at least expectedTotal (merged amounts may be higher).
+        /// Called when all icons in a batch have arrived. Fires the batch event;
+        /// the displayed number is driven by the app, not by the flyout.
         /// </summary>
-        internal void NotifyBatchComplete(long expectedTotal)
+        internal void NotifyBatchComplete()
         {
-            // Safety: ensure at least expected value (merges may have added more)
-            if (_targetValue < expectedTotal)
-                _targetValue = expectedTotal;
             OnBatchComplete?.Invoke();
         }
 
@@ -174,7 +178,7 @@ namespace vanhaodev.uimanager
                         _displayValue = Math.Max(_displayValue - step, _targetValue);
 
                     if (_amountText != null)
-                        _amountText.text = _displayValue.ToString();
+                        _amountText.text = Format(_displayValue);
 
                     await Awaitable.NextFrameAsync();
                 }
