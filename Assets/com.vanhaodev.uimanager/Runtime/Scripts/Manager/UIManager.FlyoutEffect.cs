@@ -27,8 +27,26 @@ namespace vanhaodev.uimanager
         }
 
         /// <summary>
-        /// Play flyout effect from world position to registered target.
+        /// Spawn flying icons from a world position to a registered <see cref="FlyoutTarget"/>
+        /// (looked up by <paramref name="targetKey"/>). Icons are purely visual: they make the
+        /// target shake on arrival but do NOT change its displayed number.
         /// </summary>
+        /// <remarks>
+        /// The app owns the number — drive the count-up yourself, in one of two timings:
+        /// <list type="number">
+        ///   <item>Land then count: pass an <paramref name="onComplete"/> that applies the gain,
+        ///   then push the new total via <see cref="FlyoutTarget.SetTargetValue"/>; the number
+        ///   counts up after every icon has landed.</item>
+        ///   <item>Count per coin: subscribe to <see cref="FlyoutTarget.OnIconArrived"/> and bump
+        ///   the target by each icon's value as it lands; the number rises in lockstep with the icons.</item>
+        /// </list>
+        /// Set <see cref="FlyoutTarget.Formatter"/> once to control the number style (e.g. "12.6k").
+        /// </remarks>
+        /// <param name="sourceWorldPos">World-space spawn origin (e.g. the source button position).</param>
+        /// <param name="targetKey">Key of the registered FlyoutTarget to fly toward.</param>
+        /// <param name="amount">Total value of the batch; split evenly across the spawned icons.</param>
+        /// <param name="icon">Sprite used by each flying icon.</param>
+        /// <param name="onComplete">Invoked once, after all icons in the batch have arrived.</param>
         public void PlayFlyout(
             Vector3 sourceWorldPos,
             string targetKey,
@@ -46,7 +64,8 @@ namespace vanhaodev.uimanager
         }
 
         /// <summary>
-        /// Play flyout effect from world position to direct target.
+        /// Same as the keyed overload, but flies toward a direct <see cref="FlyoutTarget"/> reference.
+        /// See that overload's remarks for the app-driven count-up contract.
         /// </summary>
         public void PlayFlyout(
             Vector3 sourceWorldPos,
@@ -213,10 +232,6 @@ namespace vanhaodev.uimanager
             var remainder = amount % iconCount;
             var completedCount = 0;
 
-            // Capture start value for final clamp
-            var startValue = target?.CurrentTargetValue ?? 0;
-            var expectedTotal = startValue + amount;
-
             for (int i = 0; i < iconCount; i++)
             {
                 var flyoutIcon = _flyoutPool.Get();
@@ -248,7 +263,7 @@ namespace vanhaodev.uimanager
                         if (!string.IsNullOrEmpty(targetKey))
                             _activeIconsPerTarget.Remove(targetKey);
 
-                        target?.NotifyBatchComplete(expectedTotal);
+                        target?.NotifyBatchComplete();
                         onComplete?.Invoke();
                     }
                 }).Forget();
