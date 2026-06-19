@@ -109,5 +109,110 @@ namespace vanhaodev.uimanager
             if (_floatingTextCache == null) BuildCache();
             return _floatingTextCache.TryGetValue(typeof(T), out var floatingText) ? floatingText as T : null;
         }
+
+#if UNITY_EDITOR
+        // Editor-only snapshot of each prefab's asset GUID, kept in sync while the lists are healthy.
+        // If Unity drops a reference (a list slot becomes "None"), the saved GUID lets the inspector's
+        // Reload button put the prefab back. GUIDs survive renames/moves; paths would not.
+        [SerializeField, HideInInspector] private List<string> _screenGuids = new();
+        [SerializeField, HideInInspector] private List<string> _popupGuids = new();
+        [SerializeField, HideInInspector] private List<string> _toastGuids = new();
+        [SerializeField, HideInInspector] private List<string> _loadingBlockGuids = new();
+        [SerializeField, HideInInspector] private List<string> _floatingTextGuids = new();
+        [SerializeField, HideInInspector] private string _flyoutIconGuid;
+        [SerializeField, HideInInspector] private string _clickEffectGuid;
+
+        /// <summary>True if any prefab list has a missing (null) slot that could be restored.</summary>
+        public bool HasMissingPrefabReferences()
+            => HasNull(_screens) || HasNull(_popups) || HasNull(_toasts)
+               || HasNull(_loadingBlocks) || HasNull(_floatingTexts);
+
+        /// <summary>
+        /// Refresh the saved GUID snapshot from the current references. Skips while anything is
+        /// missing so a broken state never overwrites good GUIDs. Returns true if the snapshot changed.
+        /// </summary>
+        public bool SyncPrefabGuids()
+        {
+            if (HasMissingPrefabReferences()) return false;
+
+            bool changed = false;
+            changed |= SyncGuids(_screens, _screenGuids);
+            changed |= SyncGuids(_popups, _popupGuids);
+            changed |= SyncGuids(_toasts, _toastGuids);
+            changed |= SyncGuids(_loadingBlocks, _loadingBlockGuids);
+            changed |= SyncGuids(_floatingTexts, _floatingTextGuids);
+            changed |= SyncGuid(_flyoutIconPrefab, ref _flyoutIconGuid);
+            changed |= SyncGuid(_clickEffectConfig?.Prefab, ref _clickEffectGuid);
+            return changed;
+        }
+
+        /// <summary>Restore any missing references from the saved GUID snapshot.</summary>
+        public void ReloadPrefabReferences()
+        {
+            FillNulls(_screens, _screenGuids);
+            FillNulls(_popups, _popupGuids);
+            FillNulls(_toasts, _toastGuids);
+            FillNulls(_loadingBlocks, _loadingBlockGuids);
+            FillNulls(_floatingTexts, _floatingTextGuids);
+
+            if (_flyoutIconPrefab == null)
+                _flyoutIconPrefab = LoadByGuid<FlyoutIcon>(_flyoutIconGuid);
+            if (_clickEffectConfig != null && _clickEffectConfig.Prefab == null)
+                _clickEffectConfig.Prefab = LoadByGuid<BaseClickEffect>(_clickEffectGuid);
+
+            // Force the type→prefab caches to rebuild from the restored lists.
+            _screenCache = null; _popupCache = null; _toastCache = null;
+            _loadingBlockCache = null; _floatingTextCache = null;
+        }
+
+        private static bool HasNull<T>(List<T> list) where T : UnityEngine.Object
+        {
+            foreach (var item in list)
+                if (item == null) return true;
+            return false;
+        }
+
+        // Snapshot a list's GUIDs (called only when the list has no nulls).
+        private static bool SyncGuids<T>(List<T> list, List<string> guids) where T : UnityEngine.Object
+        {
+            bool changed = guids.Count != list.Count;
+            if (changed) guids.Clear();
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                var guid = GuidOf(list[i]);
+                if (changed) guids.Add(guid);
+                else if (guids[i] != guid) { guids[i] = guid; changed = true; }
+            }
+            return changed;
+        }
+
+        private static bool SyncGuid(UnityEngine.Object obj, ref string guid)
+        {
+            if (obj == null) return false;          // keep the last good GUID if the ref is gone
+            var g = GuidOf(obj);
+            if (g == guid) return false;
+            guid = g;
+            return true;
+        }
+
+        // Refill only the null slots, by index, so removed entries aren't re-added.
+        private static void FillNulls<T>(List<T> list, List<string> guids) where T : UnityEngine.Object
+        {
+            for (int i = 0; i < list.Count && i < guids.Count; i++)
+                if (list[i] == null)
+                    list[i] = LoadByGuid<T>(guids[i]);
+        }
+
+        private static string GuidOf(UnityEngine.Object obj)
+            => obj != null ? UnityEditor.AssetDatabase.AssetPathToGUID(UnityEditor.AssetDatabase.GetAssetPath(obj)) : "";
+
+        private static T LoadByGuid<T>(string guid) where T : UnityEngine.Object
+        {
+            if (string.IsNullOrEmpty(guid)) return null;
+            var path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
+            return string.IsNullOrEmpty(path) ? null : UnityEditor.AssetDatabase.LoadAssetAtPath<T>(path);
+        }
+#endif
     }
 }

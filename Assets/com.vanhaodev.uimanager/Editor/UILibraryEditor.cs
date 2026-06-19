@@ -45,6 +45,37 @@ namespace vanhaodev.uimanager.editor
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            DrawPrefabRestore();
+        }
+
+        // Keep the GUID snapshot fresh while healthy, and offer a one-click restore when Unity drops
+        // a prefab reference (a list slot turns into "None").
+        private void DrawPrefabRestore()
+        {
+            var lib = (UILibrary)target;
+
+            if (lib.SyncPrefabGuids())
+                EditorUtility.SetDirty(lib);
+
+            EditorGUILayout.Space(10);
+
+            bool missing = lib.HasMissingPrefabReferences();
+            if (missing)
+                EditorGUILayout.HelpBox(
+                    "Some prefab references are missing. Click Reload to put them back from the saved paths.",
+                    MessageType.Warning);
+
+            using (new EditorGUI.DisabledScope(!missing))
+            {
+                if (GUILayout.Button("Reload missing prefab references"))
+                {
+                    Undo.RecordObject(lib, "Reload Prefab References");
+                    lib.ReloadPrefabReferences();
+                    EditorUtility.SetDirty(lib);
+                    serializedObject.Update();
+                }
+            }
         }
 
         // A short note describing the feature, then its fields.
