@@ -16,6 +16,12 @@ namespace vanhaodev.uimanager
         [SerializeField] private string _key;
         [SerializeField] private TMP_Text _amountText;
 
+        [Header("Flyout aim (where icons land)")]
+        [Tooltip("Optional explicit landing point. If set, icons fly to this exact transform — " +
+                 "drop an empty child where you want them to hit. Overrides the alignment/centre aim. " +
+                 "Alignment vs centre and the edge gap are configured globally in UILibrary > FlyoutConfig.")]
+        [SerializeField] private RectTransform _aimPoint;
+
         private RectTransform _rectTransform;
         private UIManager _manager;
         private long _displayValue;
@@ -42,6 +48,43 @@ namespace vanhaodev.uimanager
         public Func<long, string> Formatter;
 
         private string Format(long value) => Formatter?.Invoke(value) ?? value.ToString();
+
+        /// <summary>
+        /// World-space point the flyout icons should fly into. Resolves, in priority order:
+        /// an explicit <c>_aimPoint</c>, the amount text (centre, or an alignment-chosen edge when
+        /// <see cref="FlyoutConfig.AimByAlignment"/> is on), then the root rect centre. Aiming at the
+        /// text keeps icons on the number even when the field is wide.
+        /// </summary>
+        public Vector3 GetAimWorldPosition(FlyoutConfig config)
+        {
+            if (_aimPoint != null)
+                return _aimPoint.position;
+
+            if (_amountText != null)
+            {
+                // textBounds is in the text object's local space and tracks the actual glyphs.
+                _amountText.ForceMeshUpdate();
+                var bounds = _amountText.textBounds;
+                if (bounds.size.sqrMagnitude > 0f)
+                {
+                    var x = bounds.center.x;
+                    if (config != null && config.AimByAlignment)
+                    {
+                        // head = bounds.min.x (start), tail = bounds.max.x (end). Push outward by the
+                        // gap so the icon lands just past the digits instead of overlapping them.
+                        // Left grows rightward → tail; Right grows leftward → head; Centre → tail.
+                        var gap = bounds.size.y * config.AimEdgeGap;
+                        x = _amountText.horizontalAlignment == HorizontalAlignmentOptions.Right
+                            ? bounds.min.x - gap   // right-align → head, nudged left
+                            : bounds.max.x + gap;  // left-align / centre / other → tail, nudged right
+                    }
+                    return _amountText.rectTransform.TransformPoint(new Vector3(x, bounds.center.y, bounds.center.z));
+                }
+                return _amountText.rectTransform.position;
+            }
+
+            return _rectTransform != null ? _rectTransform.position : transform.position;
+        }
 
         private void Awake()
         {

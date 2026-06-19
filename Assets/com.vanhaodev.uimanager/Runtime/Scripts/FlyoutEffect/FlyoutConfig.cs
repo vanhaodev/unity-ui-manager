@@ -54,5 +54,16 @@ namespace vanhaodev.uimanager
 
         [Tooltip("Duration of shake animation")]
         public float ShakeDuration = 0.1f;
+
+        [Header("Target Aim")]
+        [Tooltip("Aim icons at a text edge chosen from the amount text's horizontal alignment " +
+                 "(Left → tail, Right → head, Centre → tail) instead of the text centre. " +
+                 "Off (default): icons fly into the centre of the number.")]
+        public bool AimByAlignment = false;
+
+        [Tooltip("When AimByAlignment is on, outward gap from the chosen text edge as a fraction of " +
+                 "the text height, so icons land just past the digits instead of overlapping them. " +
+                 "0 = exactly on the edge.")]
+        public float AimEdgeGap = 0f;
     }
 }

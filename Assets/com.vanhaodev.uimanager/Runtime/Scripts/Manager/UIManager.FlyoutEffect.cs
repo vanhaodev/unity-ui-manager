@@ -32,15 +32,11 @@ namespace vanhaodev.uimanager
         /// target shake on arrival but do NOT change its displayed number.
         /// </summary>
         /// <remarks>
-        /// The app owns the number — drive the count-up yourself, in one of two timings:
-        /// <list type="number">
-        ///   <item>Land then count: pass an <paramref name="onComplete"/> that applies the gain,
-        ///   then push the new total via <see cref="FlyoutTarget.SetTargetValue"/>; the number
-        ///   counts up after every icon has landed.</item>
-        ///   <item>Count per coin: subscribe to <see cref="FlyoutTarget.OnIconArrived"/> and bump
-        ///   the target by each icon's value as it lands; the number rises in lockstep with the icons.</item>
-        /// </list>
-        /// Set <see cref="FlyoutTarget.Formatter"/> once to control the number style (e.g. "12.6k").
+        /// The app owns the number — drive the count-up by subscribing to
+        /// <see cref="FlyoutTarget.OnIconArrived"/> and bumping the target by each icon's value as it
+        /// lands (via <see cref="FlyoutTarget.SetTargetValue"/>); the number rises in lockstep with
+        /// the icons. Use <paramref name="onComplete"/> for side effects only (e.g. persisting the
+        /// gain). Set <see cref="FlyoutTarget.Formatter"/> once to control the number style (e.g. "12.6k").
         /// </remarks>
         /// <param name="sourceWorldPos">World-space spawn origin (e.g. the source button position).</param>
         /// <param name="targetKey">Key of the registered FlyoutTarget to fly toward.</param>
@@ -101,6 +97,63 @@ namespace vanhaodev.uimanager
 
             PlayFlyoutInternalFromScreen(screenPos, target, amount, icon, onComplete);
         }
+
+        /// <summary>
+        /// Play flyout from a UI element's <see cref="RectTransform"/> (e.g. the purchased item's
+        /// icon) toward a registered target. The library resolves the source element's own canvas
+        /// camera, so icons always start from where the element sits on screen — correct for Overlay,
+        /// Screen-Space Camera, World-Space, and nested/cross-canvas setups. Prefer this over the
+        /// screen/world overloads when the source is a UI element: the caller passes a RectTransform
+        /// and the library does all the camera math.
+        /// </summary>
+        public void PlayFlyoutFromRect(
+            RectTransform source,
+            string targetKey,
+            int amount,
+            Sprite icon,
+            Action onComplete = null)
+        {
+            if (source == null)
+            {
+                Debug.LogWarning("[UIManager] Flyout source RectTransform is null");
+                return;
+            }
+            if (!FlyoutRegistry.TryGet(targetKey, out var target))
+            {
+                Debug.LogWarning($"[UIManager] FlyoutTarget not found: {targetKey}");
+                return;
+            }
+
+            PlayFlyoutInternalFromScreen(RectToScreen(source), target, amount, icon, onComplete);
+        }
+
+        /// <summary>
+        /// Same as the keyed overload, but flies toward a direct <see cref="FlyoutTarget"/> reference.
+        /// </summary>
+        public void PlayFlyoutFromRect(
+            RectTransform source,
+            FlyoutTarget target,
+            int amount,
+            Sprite icon,
+            Action onComplete = null)
+        {
+            if (source == null)
+            {
+                Debug.LogWarning("[UIManager] Flyout source RectTransform is null");
+                return;
+            }
+            if (target == null)
+            {
+                Debug.LogWarning("[UIManager] FlyoutTarget is null");
+                return;
+            }
+
+            PlayFlyoutInternalFromScreen(RectToScreen(source), target, amount, icon, onComplete);
+        }
+
+        // Screen position of a UI element via its OWN canvas camera (rt.position == pivot world pos).
+        private static Vector2 RectToScreen(RectTransform rt)
+            => RectTransformUtility.WorldToScreenPoint(CameraOf(rt), rt.position);
 
         private void PlayFlyoutInternal(
             Vector3 sourceWorldPos,
@@ -211,7 +264,7 @@ namespace vanhaodev.uimanager
             var config = _library.FlyoutConfig;
 
             var sourceLocalPos = ScreenToFlyoutLocal(screenPos);
-            var targetLocalPos = GetTargetLocalPos(target);
+            var targetLocalPos = GetTargetLocalPos(target, config);
 
             var iconCount = CalculateIconCount(amount, config);
             if (iconCount <= 0)
@@ -312,7 +365,7 @@ namespace vanhaodev.uimanager
             return local;
         }
 
-        private Vector2 GetTargetLocalPos(FlyoutTarget target)
+        private Vector2 GetTargetLocalPos(FlyoutTarget target, FlyoutConfig config)
         {
             if (target == null || _flyoutEffectLayer == null) return Vector2.zero;
 
@@ -320,21 +373,31 @@ namespace vanhaodev.uimanager
             var layerRect = _flyoutEffectLayer as RectTransform;
             if (targetRect == null || layerRect == null) return Vector2.zero;
 
-            var worldPos = targetRect.TransformPoint(Vector3.zero);
-            var screenPos = RectTransformUtility.WorldToScreenPoint(GetFlyoutCamera(), worldPos);
+            // Aim point may be the amount text (centre or alignment-chosen edge) or an explicit
+            // landing transform, so icons hit the number even in a wide field — not the rect centre.
+            var worldPos = target.GetAimWorldPosition(config);
+            // World→screen uses the TARGET's canvas camera (it may live on a different canvas);
+            // screen→local uses the FLYOUT layer's camera.
+            var screenPos = RectTransformUtility.WorldToScreenPoint(CameraOf(targetRect), worldPos);
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 layerRect, screenPos, GetFlyoutCamera(), out var local);
             return local;
         }
 
-        private Camera GetFlyoutCamera()
+        // Camera of the flyout layer's own canvas — used for screen→local conversions on this layer.
+        private Camera GetFlyoutCamera() => CameraOf(_flyoutEffectLayer as RectTransform);
+
+        // Resolve the render camera of the canvas that CONTAINS <paramref name="rt"/>.
+        // Always go through rootCanvas: a nested canvas keeps a serialized renderMode but holds no
+        // worldCamera (only the root does), so the nearest Canvas can report Camera mode yet a null
+        // camera. Overlay canvases use a null camera; camera/world canvases need their render camera.
+        // World→screen for any object must use the camera of ITS canvas, not the flyout layer's.
+        private static Camera CameraOf(RectTransform rt)
         {
-            var canvas = _flyoutEffectLayer != null
-                ? _flyoutEffectLayer.GetComponentInParent<Canvas>()
-                : null;
-            if (canvas == null || canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+            var root = rt != null ? rt.GetComponentInParent<Canvas>()?.rootCanvas : null;
+            if (root == null || root.renderMode == RenderMode.ScreenSpaceOverlay)
                 return null;
-            return canvas.worldCamera;
+            return root.worldCamera;
         }
 
         private static int CalculateIconCount(int amount, FlyoutConfig config)

@@ -17,9 +17,6 @@ namespace vanhaodev.uimanager.samples.kpopshop
         [SerializeField] private Button _btnAddMoney;
         [SerializeField] private Sprite _coinSprite;
 
-        // Showcase toggle: flips each click to alternate the two count-up timings (see OnAddMoneyClicked).
-        private bool _countPerCoin;
-
         [Header("Purchased Items")]
         [SerializeField] private Transform _itemContainer;
         [SerializeField] private OwnedItemUI _itemPrefab;
@@ -135,15 +132,13 @@ namespace vanhaodev.uimanager.samples.kpopshop
                 return;
             }
 
-            // Showcase: alternate the two count-up timings on each click.
-            //  false -> "land then count": coins fly, all land, THEN the number counts up.
-            //  true  -> "count per coin": the number ticks up as each coin lands (see OnCoinArrived).
-            _countPerCoin = !_countPerCoin;
-
-            // AddMoney persists to the bag in both modes. In per-coin mode the display has already
-            // reached the new total by the time coins land, so the resulting SetTargetValue is a no-op.
-            _uiManager.PlayFlyout(
-                sourceWorldPos: _btnAddMoney.transform.position,
+            // Count-per-coin: coins fly from the button's RectTransform and the number ticks up as
+            // each one lands (see OnCoinArrived). PlayFlyoutFromRect resolves the source canvas
+            // camera internally, so the spawn point is correct across any render mode.
+            // AddMoney persists to the bag; by the time coins land the per-coin bumps already match
+            // the new total, so RefreshMoney's SetTargetValue reconciles to a no-op.
+            _uiManager.PlayFlyoutFromRect(
+                source: (RectTransform)_btnAddMoney.transform,
                 targetKey: "money",
                 amount: addAmountCents,
                 icon: _coinSprite,
@@ -151,11 +146,11 @@ namespace vanhaodev.uimanager.samples.kpopshop
             );
         }
 
-        // Per-coin count-up: nudge the displayed total by each coin's value as it lands,
-        // so the number rises in lockstep with the coins. Inactive in "land then count" mode.
+        // Count-per-coin: nudge the displayed total by each coin's value as it lands,
+        // so the number rises in lockstep with the coins.
         private void OnCoinArrived(int valuePerIcon)
         {
-            if (!_countPerCoin || _moneyFlyoutTarget == null) return;
+            if (_moneyFlyoutTarget == null) return;
             _moneyFlyoutTarget.SetTargetValue(_moneyFlyoutTarget.CurrentTargetValue + valuePerIcon);
         }
 
