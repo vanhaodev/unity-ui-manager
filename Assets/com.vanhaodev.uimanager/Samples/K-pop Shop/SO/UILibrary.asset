@@ -52,3 +52,18 @@ MonoBehaviour:
     Prefab: {fileID: 8890829641647884558, guid: e3e8d7b74490adb4baa30e4822894eb7, type: 3}
     ActiveFeature: 1
     MinInterval: 0.1
+  _screenGuids:
+  - 96e04273b1b85524aa6f2d290e5e4302
+  - 35c915b3bd3047c4f8fff76f9ad3fa35
+  _popupGuids:
+  - 88003d9af444d2d448d8391bd6a7f51a
+  - 47081e67ae1b922408dab1b18848fad6
+  _toastGuids:
+  - bc91c7b5439468d4a893083ff55708ad
+  _loadingBlockGuids:
+  - 96f8bd6fbb40abd4988b4b94690384be
+  _floatingTextGuids:
+  - 503988e52da00eb4ebf46c28114d5b3e
+  - 0417c93d17f41ac4982c1b4fbc202dcf
+  _flyoutIconGuid: 601f71555573dd84d818941931d400c9
+  _clickEffectGuid: e3e8d7b74490adb4baa30e4822894eb7
