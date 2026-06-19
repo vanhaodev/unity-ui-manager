@@ -217,19 +217,21 @@ namespace vanhaodev.uimanager.samples.kpopshop
                 {
                     var ui = FindFirstObjectByType<UIManager>();
 
+                    // Two same-type notices: keepSameTypeOnTop keeps "Welcome!" on top so it is read
+                    // first, with "Info" waiting behind it (instead of the newer one covering it).
                     ui?.ShowPopup<PopupNotice>(p =>
                     {
                         p.SetData("Welcome!",
                             "Welcome to <b>K-pop Shop</b> sample XD\n" +
                             "This is a sample to help you better understand my UI Manager.");
-                    });
+                    }, keepSameTypeOnTop: true);
 
                     ui?.ShowPopup<PopupNotice>(p =>
                     {
                         p.SetData("Info",
                             "Including built-in utilities for your game UI,\n" +
                             "designed to stay simple and not overly complex.");
-                    });
+                    }, keepSameTypeOnTop: true);
                     FindAnyObjectByType<SoundManager>()?.PlayLoop("MainTheme", 0.3f);
                     _isShowWelcome = true;
                 }

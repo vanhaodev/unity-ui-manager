@@ -37,7 +37,8 @@ Show/close flow: `UIElement.Show/Close` → `OnShowStart`→ animation → `OnSh
 ## Caching & pooling
 
 - Screens/popups/loading blocks: cached per type, reused (`ClearCache()` frees all).
-- Popups can stack (multiple active); same-type stacking keeps the older one visually on top.
+- Popups can stack (multiple active); newest on top by default. `ShowPopup(..., keepSameTypeOnTop: true)`
+  slips a new popup below an open same-type one (opt-in; see `TryGetNearestSameType`).
 - Toasts & flyout icons: **object-pooled** (`com.vanhaodev.objectpool` dependency).
 
 ## Conventions / gotchas

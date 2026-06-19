@@ -17,50 +17,35 @@ namespace vanhaodev.uimanager
         public event Action<BasePopup> OnPopupOpened;
         public event Action<BasePopup> OnPopupClosed;
 
-        public T ShowPopup<T>(Action<T> onSetup = null, Action onComplete = null) where T : BasePopup
+        /// <summary>
+        /// Open a popup on top of the stack. By default the newest popup sits on top (standard modal
+        /// stacking). Set <paramref name="keepSameTypeOnTop"/> for the special case where an already-open
+        /// popup of the SAME type should stay visually on top — the new one slips in just below it, so a
+        /// repeat-triggered dialog doesn't cover the one the player is already reading.
+        /// </summary>
+        public T ShowPopup<T>(Action<T> onSetup = null, Action onComplete = null, bool keepSameTypeOnTop = false) where T : BasePopup
         {
             var popup = GetOrCreatePopup<T>();
             if (popup == null) return null;
 
             onSetup?.Invoke(popup);
-            ShowPopupInternal(popup, onComplete);
+            ShowPopupInternal(popup, onComplete, keepSameTypeOnTop);
             return popup;
         }
 
-        private void ShowPopupInternal(BasePopup popup, Action onComplete)
+        private void ShowPopupInternal(BasePopup popup, Action onComplete, bool keepSameTypeOnTop)
         {
             _activePopups.Add(popup);
 
-            var type = popup.GetType();
-            BasePopup sameType = null;
-
-            // Iterate from top (end of list) to bottom
-            for (int i = _activePopups.Count - 1; i >= 0; i--)
+            if (keepSameTypeOnTop && TryGetNearestSameType(popup, out var sameType))
             {
-                var current = _activePopups[i];
-
-                // Skip the popup we just added (it is always the last element)
-                if (current == popup)
-                    continue;
-
-                // Find the nearest popup with the same type
-                if (current.GetType() == type)
-                {
-                    sameType = current;
-                    break;
-                }
-            }
-
-            if (sameType != null)
-            {
-                // Place new popup right below the existing same-type popup
-                // This ensures older popup stays visually on top
-                int index = sameType.transform.GetSiblingIndex();
-                popup.transform.SetSiblingIndex(index);
+                // Slip the new popup right below the existing same-type popup so the older one
+                // stays visually on top.
+                popup.transform.SetSiblingIndex(sameType.transform.GetSiblingIndex());
             }
             else
             {
-                // Default behavior: newest popup goes on top
+                // Default: newest popup goes on top.
                 popup.transform.SetAsLastSibling();
             }
 
@@ -69,6 +54,25 @@ namespace vanhaodev.uimanager
                 onComplete?.Invoke();
                 OnPopupOpened?.Invoke(popup);
             });
+        }
+
+        // Find the topmost other active popup of the same type as <paramref name="popup"/>.
+        private bool TryGetNearestSameType(BasePopup popup, out BasePopup sameType)
+        {
+            var type = popup.GetType();
+            for (int i = _activePopups.Count - 1; i >= 0; i--)
+            {
+                var current = _activePopups[i];
+                if (current == popup) continue;            // skip the one we just added
+                if (current.GetType() == type)
+                {
+                    sameType = current;
+                    return true;
+                }
+            }
+
+            sameType = null;
+            return false;
         }
 
         public void ClosePopup<T>(Action onComplete = null) where T : BasePopup

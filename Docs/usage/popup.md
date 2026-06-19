@@ -75,7 +75,7 @@ You can also assign a **Close button** to `_btnClose`, just like screens.
 
 | Member | Description |
 | --- | --- |
-| `ui.ShowPopup<T>(setup, onComplete)` | Open a popup on top of the stack. |
+| `ui.ShowPopup<T>(setup, onComplete, keepSameTypeOnTop)` | Open a popup (newest on top; flag keeps an open same-type popup on top). |
 | `ui.ClosePopup<T>()` / `ClosePopup(popup)` | Close a specific popup. |
 | `ui.CloseTopPopup()` | Close the topmost popup. |
 | `ui.CloseAllPopups()` / `CloseAllPopups<T>()` | Close all popups (optionally of one type). |
@@ -83,7 +83,16 @@ You can also assign a **Close button** to `_btnClose`, just like screens.
 | `ui.TopPopup` / `ui.HasActivePopup` | The topmost popup / whether any is open. |
 | `ui.OnPopupOpened` / `ui.OnPopupClosed` | Events fired as popups open and close. |
 
-{% hint style="info" %}
-Open the **same** popup type twice and the older one stays visually on top, so a freshly opened
-dialog never hides one you were already reading.
-{% endhint %}
+## Stacking order
+
+By default the **newest popup sits on top**, like any standard modal stack.
+
+For the occasional case where you don't want a repeat-triggered dialog to cover one the player is
+already reading, pass `keepSameTypeOnTop: true`. The new popup then slips in **below** any open popup
+of the same type, keeping the older one on top:
+
+```csharp
+ui.ShowPopup<RewardPopup>(p => p.Setup(reward), keepSameTypeOnTop: true);
+```
+
+It only affects popups of the **same type** — different types always stack newest-on-top.
