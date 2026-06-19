@@ -14,10 +14,10 @@ re-scanning the tree. Keep it updated when structure or conventions change.
 Before bumping the package version or updating the distributed package, **read
 [`Docs/release-export-guide.md`](Docs/release-export-guide.md)**. Key points:
 
-- The version lives in **4 places**: `Assets/com.vanhaodev.uimanager/package.json`,
-  `Exported/com.vanhaodev.uimanager/package.json` (each: `version` + `changelogUrl`), and the
-  **two** ui-manager install URLs in `Docs/README.md`. Do not touch `objectpool` /
-  `multiplayer.center` refs.
+- The version lives in **5 places**: `Assets/com.vanhaodev.uimanager/package.json`,
+  `Exported/com.vanhaodev.uimanager/package.json` (each: `version` + `changelogUrl`), the
+  **two** ui-manager install URLs in `Docs/README.md`, and the root `README.md` (version badge +
+  install URL). Do not touch `objectpool` / `multiplayer.center` refs.
 - Users install the **`Exported/`** folder (git URL `…?path=Exported/com.vanhaodev.uimanager#<ver>`).
   It is a verbatim mirror of `Assets/com.vanhaodev.uimanager` with **identical GUIDs** — sync by
   copying files + `.meta` directly; path map `Samples` → `Samples~`.

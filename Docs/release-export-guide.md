@@ -13,6 +13,7 @@ Update the ui-manager version in these places (replace `1.0.1`-style with the ne
 | `Assets/com.vanhaodev.uimanager/package.json` | `version` + `changelogUrl` (`…/commits/X.Y.Z`) |
 | `Exported/com.vanhaodev.uimanager/package.json` | same two fields |
 | `Docs/README.md` | the **two** install URLs ending `#X.Y.Z` (Git URL tab + manifest.json tab) |
+| `README.md` (repo root) | the version **badge** and the ui-manager install URL ending `#X.Y.Z` |
 
 **Do NOT touch** `com.vanhaodev.objectpool#…` refs or `com.unity.multiplayer.center` —
 those are unrelated dependencies with their own versions.
