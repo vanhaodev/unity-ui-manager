@@ -1,12 +1,12 @@
 {
-    "name": "com.vanhaodev.uimanager",
+    "name": "com.vanhaodev.uimanager.editor",
     "rootNamespace": "",
     "references": [
-        "GUID:2ffb18b1718fab04ba78cb5c14bbd018",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "Unity.InputSystem"
+        "com.vanhaodev.uimanager"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
