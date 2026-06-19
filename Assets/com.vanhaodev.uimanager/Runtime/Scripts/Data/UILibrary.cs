@@ -39,6 +39,11 @@ namespace vanhaodev.uimanager
         [Tooltip("Flyout effect animation and behavior settings.")]
         [SerializeField] private FlyoutConfig _flyoutConfig = new();
 
+        [Space(8)]
+        [Header("── Click Effect Config ──")]
+        [Tooltip("Effect played at each click/touch point. Leave the prefab null to disable.")]
+        [SerializeField] private ClickEffectConfig _clickEffectConfig = new();
+
         private Dictionary<Type, BaseScreen> _screenCache;
         private Dictionary<Type, BasePopup> _popupCache;
         private Dictionary<Type, BaseToast> _toastCache;
@@ -53,6 +58,7 @@ namespace vanhaodev.uimanager
         public Vector2 FloatingScreenPadding => _floatingScreenPadding;
         public FlyoutIcon FlyoutIconPrefab => _flyoutIconPrefab;
         public FlyoutConfig FlyoutConfig => _flyoutConfig;
+        public ClickEffectConfig ClickEffectConfig => _clickEffectConfig;
 
         private void OnEnable()
         {

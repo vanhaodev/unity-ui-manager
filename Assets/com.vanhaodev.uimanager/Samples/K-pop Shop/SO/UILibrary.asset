@@ -46,3 +46,9 @@ MonoBehaviour:
     FlightRandomness: 0.2
     ShakeIntensity: 5
     ShakeDuration: 0.1
+    AimByAlignment: 0
+    AimEdgeGap: 0
+  _clickEffectConfig:
+    Prefab: {fileID: 8890829641647884558, guid: e3e8d7b74490adb4baa30e4822894eb7, type: 3}
+    AutoPlayOnInput: 1
+    MinInterval: 0

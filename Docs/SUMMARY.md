@@ -8,4 +8,5 @@
   * [Loading Block](usage/loading-block.md)
   * [Floating Text](usage/floating-text.md)
   * [Flyout Effect](usage/flyout.md)
+  * [Click Effect](usage/click-effect.md)
 * [Animation](animation.md)

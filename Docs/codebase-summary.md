@@ -21,6 +21,7 @@ verbatim mirror (identical GUIDs) that users install — only synced at release 
 | Loading block | `LoadingBlock/` | `BaseLoadingBlock`, `LoadingBlockHandle` (IDisposable), ref-counted. |
 | Floating text | `FloatingText/` | `FloatingText`, `FloatingTextConfig`, `Templates/FloatingTextDefault`. |
 | Flyout effect | `FlyoutEffect/` | `FlyoutTarget`, `FlyoutIcon`, `FlyoutAnimator`, `FlyoutConfig`, `FlyoutRegistry`. |
+| Click effect | `ClickEffect/` | `BaseClickEffect` (subclass for particle/VFX/sound), `Templates/ClickEffectRipple`, `ClickEffectConfig`. Manager partial polls pointer in `Update` (`#if ENABLE_INPUT_SYSTEM` / `#elif ENABLE_LEGACY_INPUT_MANAGER`). |
 | Misc widgets | `Button/UIButton.cs`, `Text/MarqueeText.cs` | Standalone helpers. |
 | Sample | `Samples/K-pop Shop/` | Working example of every feature. |
 
@@ -39,7 +40,8 @@ Show/close flow: `UIElement.Show/Close` → `OnShowStart`→ animation → `OnSh
 - Screens/popups/loading blocks: cached per type, reused (`ClearCache()` frees all).
 - Popups can stack (multiple active); newest on top by default. `ShowPopup(..., keepSameTypeOnTop: true)`
   slips a new popup below an open same-type one (opt-in; see `TryGetNearestSameType`).
-- Toasts & flyout icons: **object-pooled** (`com.vanhaodev.objectpool` dependency).
+- Toasts, flyout icons & click effects: **object-pooled** (`com.vanhaodev.objectpool` dependency).
+  Click-effect pool is **lazy** — created on first `PlayClickEffect`, so it costs nothing when unused.
 
 ## Conventions / gotchas
 
@@ -51,6 +53,10 @@ Show/close flow: `UIElement.Show/Close` → `OnShowStart`→ animation → `OnSh
   `CameraOf` in `UIManager.FlyoutEffect.cs`. ⚠️ `UIManager.FloatingText.cs > GetLayerCamera()` still
   has the pre-fix `GetComponentInParent<Canvas>()` form — fix to `rootCanvas` if touched.
 - **Async:** uses Unity 6 `Awaitable` + `AnimationHelper`; cancellation via `AnimationHelper.ResetToken`.
+- **Click effect input:** auto-play reads the pointer **device** directly (bypasses EventSystem) so it
+  fires everywhere incl. over buttons without blocking. Backend auto-detected by `#if` — the asmdef
+  references `Unity.InputSystem`; legacy-only projects without the package compile fine (one harmless
+  unresolved-reference warning) and use the legacy branch.
 - **No auto-discovery:** `FlyoutTarget` must be `Register(manager)`ed by the app (unregisters on destroy).
 - **Versioning:** version lives in 4 places — see [`release-export-guide.md`](release-export-guide.md).
 
