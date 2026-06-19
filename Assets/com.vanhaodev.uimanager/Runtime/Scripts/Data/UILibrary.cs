@@ -7,15 +7,12 @@ namespace vanhaodev.uimanager
     [CreateAssetMenu(fileName = "UILibrary", menuName = "UI Manager/Library")]
     public class UILibrary : ScriptableObject
     {
-        [Header("── Prefabs ──")]
         [SerializeField] private List<BaseScreen> _screens = new();
         [SerializeField] private List<BasePopup> _popups = new();
         [SerializeField] private List<BaseToast> _toasts = new();
         [SerializeField] private List<BaseLoadingBlock> _loadingBlocks = new();
         [SerializeField] private List<FloatingText> _floatingTexts = new();
 
-        [Space(8)]
-        [Header("── Toast Config ──")]
         [Tooltip("Maximum number of toasts visible on screen at once. Exceeding will auto-dismiss the oldest.")]
         [SerializeField] private int _maxConcurrentToasts = 3;
         [Tooltip("Spacing between stacked toasts (px).")]
@@ -23,8 +20,6 @@ namespace vanhaodev.uimanager
         [Tooltip("Padding from screen edges. X = horizontal (left/right), Y = vertical (top/bottom).")]
         [SerializeField] private Vector2 _toastPadding = new Vector2(24f, 48f);
 
-        [Space(8)]
-        [Header("── Floating Text Config ──")]
         [Tooltip("Delay (s) between floating texts shown from the same source, so they don't overlap.")]
         [SerializeField] private float _floatingShowInterval = 0.2f;
         [Tooltip("Max active floating texts per source. Beyond this, the oldest fades out immediately to avoid lag.")]
@@ -32,15 +27,11 @@ namespace vanhaodev.uimanager
         [Tooltip("Keep floating texts this far (px) inside the screen edges. X = left/right, Y = top/bottom.")]
         [SerializeField] private Vector2 _floatingScreenPadding = new Vector2(16f, 16f);
 
-        [Space(8)]
-        [Header("── Flyout Effect Config ──")]
         [Tooltip("Default flyout icon prefab (requires Image + CanvasGroup + FlyoutIcon).")]
         [SerializeField] private FlyoutIcon _flyoutIconPrefab;
         [Tooltip("Flyout effect animation and behavior settings.")]
         [SerializeField] private FlyoutConfig _flyoutConfig = new();
 
-        [Space(8)]
-        [Header("── Click Effect Config ──")]
         [Tooltip("Effect played at each click/touch point. Leave the prefab null to disable.")]
         [SerializeField] private ClickEffectConfig _clickEffectConfig = new();
 

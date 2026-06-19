@@ -2,4 +2,5 @@
   <Project Path="com.vanhaodev.uimanager.csproj" />
   <Project Path="plugin.dot.test.csproj" />
   <Project Path="com.vanhaodev.uimanager.samples.kpopshop.csproj" />
+  <Project Path="com.vanhaodev.uimanager.editor.csproj" />
 </Solution>

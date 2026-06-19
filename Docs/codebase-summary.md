@@ -23,6 +23,7 @@ verbatim mirror (identical GUIDs) that users install — only synced at release 
 | Flyout effect | `FlyoutEffect/` | `FlyoutTarget`, `FlyoutIcon`, `FlyoutAnimator`, `FlyoutConfig`, `FlyoutRegistry`. |
 | Click effect | `ClickEffect/` | `BaseClickEffect` (subclass for particle/VFX/sound), `Templates/ClickEffectRipple`, `ClickEffectConfig`. Manager partial polls pointer in `Update` (`#if ENABLE_INPUT_SYSTEM` / `#elif ENABLE_LEGACY_INPUT_MANAGER`). |
 | Misc widgets | `Button/UIButton.cs`, `Text/MarqueeText.cs` | Standalone helpers. |
+| Editor | `Editor/` (own asmdef) | `UILibraryEditor` — custom IMGUI inspector grouping UILibrary fields into boxed/foldout sections (no serialization change). |
 | Sample | `Samples/K-pop Shop/` | Working example of every feature. |
 
 ## How a feature is wired
