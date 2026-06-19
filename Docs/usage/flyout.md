@@ -75,19 +75,31 @@ the shake is skipped.
 
 ## Playing the effect
 
-Call `PlayFlyout` from anywhere (e.g. a button click). `amount` is the total value of the batch; it
-is split across the spawned icons.
+When the source is a **UI element** (a shop item icon, a button…), use `PlayFlyoutFromRect` and pass
+that element's `RectTransform`. The library figures out where it sits on screen for you, so icons
+start from the element no matter how your canvas is set up. `amount` is the total value of the batch;
+it is split across the spawned icons.
 
 ```csharp
-_uiManager.PlayFlyout(
-    sourceWorldPos: button.transform.position,
+_uiManager.PlayFlyoutFromRect(
+    source: (RectTransform)itemIcon.transform,   // the icon the player tapped
     targetKey: "money",
     amount: 1000,
     icon: coinSprite,
     onComplete: () => { /* runs once after all icons land */ });
 ```
 
-There is also an overload that takes a direct `FlyoutTarget` reference instead of a key.
+{% hint style="success" %}
+Prefer `PlayFlyoutFromRect` for UI sources — it just works with Overlay, Screen-Space Camera,
+World-Space, and nested canvases. You don't have to compute any screen position yourself.
+{% endhint %}
+
+Other ways to start the effect:
+
+* `PlayFlyout(sourceWorldPos, …)` — start from a **world position** (e.g. an enemy in the scene).
+* `PlayFlyoutFromScreen(screenPos, …)` — start from a **screen position** you already have.
+
+Each one has an overload that takes a direct `FlyoutTarget` reference instead of a `targetKey`.
 
 ## Driving the number
 
@@ -103,22 +115,7 @@ _moneyTarget.SetTargetValue(newTotal);
 ```
 
 `SetTargetValue` reuses the built-in lerp, so the number animates from its current display to the
-new total. Pick one of two timings:
-
-### Land then count
-
-The number counts up **after** every icon has landed. Apply the gain in `onComplete`:
-
-```csharp
-_uiManager.PlayFlyout(buttonPos, "money", 1000, coinSprite,
-    onComplete: () =>
-    {
-        wallet.Add(10);                          // updates your data
-        _moneyTarget.SetTargetValue(wallet.Total); // count-up starts now
-    });
-```
-
-### Count per coin
+new total.
 
 The number ticks up **as each icon lands**, rising in lockstep with the coins. Subscribe to
 `OnIconArrived` and bump the target by each icon's value:
@@ -133,7 +130,9 @@ private void OnCoinArrived(int valuePerIcon)
 }
 ```
 
-`OnBatchComplete` is also available if you only need a callback when the whole batch has arrived.
+Use `onComplete` only for **side effects** that should run once the batch finishes — e.g. saving the
+new balance to your data. The displayed number is still driven by `OnIconArrived` above, so the two
+stay in sync. `OnBatchComplete` is also available if you just need a "batch done" callback.
 
 ## Formatting the number
 
@@ -151,6 +150,28 @@ _moneyTarget.Formatter = value =>
 
 The formatter is applied on every count-up frame, so abbreviated values animate too
 (`…11.8k → 12.6k`).
+
+## Where icons land
+
+By default icons fly into the **centre of the number**. That already follows the text, so even a wide
+field (a long label next to the value) gets hit correctly.
+
+If you'd rather have icons land at the **edge** of the number, turn on **Aim By Alignment** in your
+Flyout Config. The landing spot then follows the text's own alignment:
+
+| Text alignment | Icons land at |
+| --- | --- |
+| Left | the **end** of the number (right side) |
+| Right | the **start** of the number (left side) |
+| Center | the **end** of the number (right side) |
+
+Use **Aim Edge Gap** to push the landing spot a little further out so icons sit just past the digits
+instead of on top of them (it scales with the text size; `0` lands right on the edge).
+
+{% hint style="info" %}
+Need a pixel-perfect spot? Drop an empty child where you want icons to hit and assign it to the
+**Aim Point** field on the `FlyoutTarget`. It overrides the centre/alignment behaviour.
+{% endhint %}
 
 ## API reference
 
@@ -187,3 +208,5 @@ Set on the **Flyout Config** in your UILibrary.
 | `FlightRandomness` | 0.2 | Randomness of the flight path (0–1). |
 | `ShakeIntensity` | 5 | Shake strength on impact. |
 | `ShakeDuration` | 0.1 | Shake duration on impact. |
+| `AimByAlignment` | off | Land icons at the number's edge (per text alignment) instead of its centre. |
+| `AimEdgeGap` | 0 | When aiming by alignment, gap past the edge (as a fraction of text height). |
