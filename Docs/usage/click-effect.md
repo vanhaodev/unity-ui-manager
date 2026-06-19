@@ -50,9 +50,9 @@ never intercepts taps.
 
 ### Let it play on every tap
 
-Tick **Auto Play** in the config and you're done — every press (mouse, touch or pen) spawns an effect
-at that point, anywhere on screen. **Min Interval** throttles rapid taps (seconds between auto
-effects; default `0.4`, set `0` for no limit).
+Tick **Active Feature** in the config and every press (mouse, touch or pen) spawns an effect at that
+point, anywhere on screen. **Min Interval** throttles rapid taps (seconds between auto effects;
+default `0.1`, set `0` for no limit).
 
 {% hint style="success" %}
 Auto mode works with **any input setup** — it detects the New Input System or the legacy Input
@@ -62,7 +62,7 @@ needs the `com.unity.inputsystem` package (most already have it); legacy-only pr
 
 ### Play it yourself
 
-Leave auto off and call it from your own code whenever you want a hit:
+Leave **Active Feature** off and call it from your own code whenever you want a hit:
 
 ```csharp
 ui.PlayClickEffect(screenPosition);
@@ -105,5 +105,5 @@ it exactly the same way.
 | --- | --- |
 | `ui.PlayClickEffect(screenPos)` | Play one effect at a screen position (no input package needed). |
 | `ClickEffectConfig.Prefab` | The effect prefab (null = feature off). |
-| `ClickEffectConfig.AutoPlay` | Auto-play on every press, anywhere. |
+| `ClickEffectConfig.ActiveFeature` | Auto-play on every press, anywhere (off by default). |
 | `ClickEffectConfig.MinInterval` | Throttle between auto effects (seconds, default 0.4). |

@@ -14,13 +14,13 @@ namespace vanhaodev.uimanager
                  "Leave null to disable the feature entirely.")]
         public BaseClickEffect Prefab;
 
-        [Tooltip("Automatically play the effect on every screen press — mouse, touch or pen, on any " +
-                 "platform, anywhere on screen (including over buttons). Off: nothing runs until your " +
-                 "app calls PlayClickEffect itself.")]
-        public bool AutoPlay = false;
+        [Tooltip("Tick to auto-play the effect on every screen press — mouse, touch or pen, anywhere " +
+                 "(including over buttons). Off (default): nothing auto-plays; you can still trigger " +
+                 "it manually via PlayClickEffect.")]
+        public bool ActiveFeature = false;
 
         [Tooltip("Minimum seconds between auto-played effects (throttles rapid taps). 0 = no limit. " +
                  "Does not affect manual PlayClickEffect calls.")]
-        public float MinInterval = 0.4f;
+        public float MinInterval = 0.1f;
     }
 }

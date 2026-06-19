@@ -36,7 +36,7 @@ namespace vanhaodev.uimanager
         private void Update()
         {
             var config = _library != null ? _library.ClickEffectConfig : null;
-            if (config == null || !config.AutoPlay || config.Prefab == null) return;
+            if (config == null || config.Prefab == null || !config.ActiveFeature) return;
 
             DetectClickInput(config);
         }
