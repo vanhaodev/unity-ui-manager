@@ -42,19 +42,22 @@ namespace vanhaodev.uimanager.effect
             float duration,
             CancellationToken ct = default)
         {
+            if (rect == null) return;
             Vector2 start = rect.anchoredPosition;
             float elapsed = 0f;
 
             while (elapsed < duration)
             {
                 if (ct.IsCancellationRequested) return;
+                // The target can be destroyed between frames (e.g. scene change); bail before touching it.
+                if (rect == null) return;
                 elapsed += Time.deltaTime;
                 rect.anchoredPosition =
                     Vector2.LerpUnclamped(start, target, EaseOutCubic(Mathf.Clamp01(elapsed / duration)));
                 await Awaitable.NextFrameAsync(ct);
             }
 
-            rect.anchoredPosition = target;
+            if (rect != null) rect.anchoredPosition = target;
         }
 
         public static async Awaitable Alpha(
@@ -63,18 +66,21 @@ namespace vanhaodev.uimanager.effect
             float duration,
             CancellationToken ct = default)
         {
+            if (cg == null) return;
             float start = cg.alpha;
             float elapsed = 0f;
 
             while (elapsed < duration)
             {
                 if (ct.IsCancellationRequested) return;
+                // The target can be destroyed between frames (e.g. scene change); bail before touching it.
+                if (cg == null) return;
                 elapsed += Time.deltaTime;
                 cg.alpha = Mathf.LerpUnclamped(start, target, EaseOutCubic(Mathf.Clamp01(elapsed / duration)));
                 await Awaitable.NextFrameAsync(ct);
             }
 
-            cg.alpha = target;
+            if (cg != null) cg.alpha = target;
         }
         
         public static async Awaitable ImageAlpha(
@@ -83,12 +89,15 @@ namespace vanhaodev.uimanager.effect
             float duration,
             CancellationToken ct = default)
         {
+            if (image == null) return;
             float start = image.color.a;
             float elapsed = 0f;
 
             while (elapsed < duration)
             {
                 if (ct.IsCancellationRequested) return;
+                // The target can be destroyed between frames (e.g. scene change); bail before touching it.
+                if (image == null) return;
                 elapsed += Time.deltaTime;
                 var c = image.color;
                 c.a = Mathf.LerpUnclamped(start, target, EaseOutCubic(Mathf.Clamp01(elapsed / duration)));
@@ -96,6 +105,7 @@ namespace vanhaodev.uimanager.effect
                 await Awaitable.NextFrameAsync(ct);
             }
 
+            if (image == null) return;
             var final = image.color;
             final.a = target;
             image.color = final;
@@ -107,19 +117,22 @@ namespace vanhaodev.uimanager.effect
             float duration,
             CancellationToken ct = default)
         {
+            if (transform == null) return;
             Vector3 start = transform.localScale;
             float elapsed = 0f;
 
             while (elapsed < duration)
             {
                 if (ct.IsCancellationRequested) return;
+                // The target can be destroyed between frames (e.g. scene change); bail before touching it.
+                if (transform == null) return;
                 elapsed += Time.deltaTime;
                 transform.localScale =
                     Vector3.LerpUnclamped(start, target, EaseOutCubic(Mathf.Clamp01(elapsed / duration)));
                 await Awaitable.NextFrameAsync(ct);
             }
 
-            transform.localScale = target;
+            if (transform != null) transform.localScale = target;
         }
     }
 
