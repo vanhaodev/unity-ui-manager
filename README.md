@@ -5,7 +5,7 @@
 **One manager for every piece of your game's UI — screens, popups, toasts, effects — with smooth animations and zero boilerplate.**
 
 [![Unity](https://img.shields.io/badge/Unity-6000.0%2B-black?logo=unity)](https://unity.com/)
-[![Version](https://img.shields.io/badge/version-1.0.7-blue)](https://github.com/vanhaodev/unity-ui-manager/releases)
+[![Version](https://img.shields.io/badge/version-1.0.8-blue)](https://github.com/vanhaodev/unity-ui-manager/releases)
 [![Docs](https://img.shields.io/badge/docs-gitbook-brightgreen)](https://vanhaodev.gitbook.io/ui-manager)
 
 </div>
@@ -51,7 +51,7 @@ Requires **Unity 6+**. Add both packages via **Package Manager → Add package f
 
 ```
 https://github.com/vanhaodev/unity-object-pool.git?path=Exported/com.vanhaodev.objectpool#1.0.1
-https://github.com/vanhaodev/unity-ui-manager.git?path=Exported/com.vanhaodev.uimanager#1.0.7
+https://github.com/vanhaodev/unity-ui-manager.git?path=Exported/com.vanhaodev.uimanager#1.0.8
 ```
 
 Then import the **K-pop Shop** sample (Package Manager → UI Manager → Samples) to see every feature in action.
