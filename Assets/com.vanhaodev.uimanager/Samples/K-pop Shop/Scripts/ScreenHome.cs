@@ -35,6 +35,25 @@ namespace vanhaodev.uimanager.samples.kpopshop
             ("BabyMonster - DRIP", "https://colorcodedlyrics.com/wp-content/uploads/2024/10/BABYMONSTER-DRIP-AlbumArt.png"),
         };
 
+        [Tooltip("Click for a random message of a random length — the point is to watch FloatingTextMessage's "
+                 + "box size itself to whatever string it is handed.")]
+        [SerializeField] private Button _btnTestMessage;
+
+        // Deliberately graded from two characters to far more than fits, so one button walks the fitter
+        // through every branch it has: hug the string, stop at Max Width, shrink the font, ellipsize.
+        private static readonly string[] _testMessages =
+        {
+            "Hi",
+            "Wow",
+            "Nice one",
+            "Feeling good today",
+            "Let's dance until the sun comes up",
+            "This box should hug the line exactly",
+            "A longer line that starts pushing right up against the max width",
+            "Here is a much longer message, long enough that the box has to stop growing and the font has to shrink a step",
+            "And this last one simply runs on and on, well past anything a floating message has any business saying, so the width clamps, the font bottoms out at its minimum, and the tail gets cut off with an ellipsis",
+        };
+
         private UserManager _userManager;
         private UIManager _uiManager;
         private bool _isShowWelcome = false;
@@ -43,6 +62,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
             base.Awake();
             _btnShop?.onClick.AddListener(OnShopClicked);
             _btnTestFloat?.onClick.AddListener(OnTestFloatClicked);
+            _btnTestMessage?.onClick.AddListener(OnTestMessageClicked);
             _btnAddMoney?.onClick.AddListener(OnAddMoneyClicked);
             _userManager ??= FindFirstObjectByType<UserManager>();
             SetAnimation(new TempSlideAnimation());
@@ -53,6 +73,7 @@ namespace vanhaodev.uimanager.samples.kpopshop
             base.OnDestroy();
             _btnShop?.onClick.RemoveListener(OnShopClicked);
             _btnTestFloat?.onClick.RemoveListener(OnTestFloatClicked);
+            _btnTestMessage?.onClick.RemoveListener(OnTestMessageClicked);
             _btnAddMoney?.onClick.RemoveListener(OnAddMoneyClicked);
         }
 
@@ -115,6 +136,17 @@ namespace vanhaodev.uimanager.samples.kpopshop
             ImageLoader.LoadSprite(this, album.Url, cover =>
                 _uiManager?.ShowFloatingText<FloatingTextAlbum>(
                     t => t.SetAlbum(album.Name, cover), _btnTestFloat.transform));
+        }
+
+        // Float a random message from the Mgs button. Every click hands FloatingTextMessage a string of a
+        // different length, which is the whole point: the prefab authors no width, the fitter decides it.
+        private void OnTestMessageClicked()
+        {
+            if (_btnTestMessage == null) return;
+            _uiManager ??= FindFirstObjectByType<UIManager>();
+
+            var message = _testMessages[UnityEngine.Random.Range(0, _testMessages.Length)];
+            _uiManager?.ShowFloatingText<FloatingTextMessage>(t => t.SetText(message), _btnTestMessage.transform);
         }
 
         private void OnAddMoneyClicked()

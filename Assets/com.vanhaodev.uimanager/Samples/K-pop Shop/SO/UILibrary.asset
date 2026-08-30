@@ -25,6 +25,7 @@ MonoBehaviour:
   _floatingTexts:
   - {fileID: 3683437002170207251, guid: 503988e52da00eb4ebf46c28114d5b3e, type: 3}
   - {fileID: 1337466499009494192, guid: 0417c93d17f41ac4982c1b4fbc202dcf, type: 3}
+  - {fileID: 6810457392018374655, guid: 5a481ef5d93a45c399454230a9ab7cad, type: 3}
   _maxConcurrentToasts: 3
   _toastSpacing: 12
   _toastPadding: {x: 24, y: 24}
@@ -65,5 +66,6 @@ MonoBehaviour:
   _floatingTextGuids:
   - 503988e52da00eb4ebf46c28114d5b3e
   - 0417c93d17f41ac4982c1b4fbc202dcf
+  - 5a481ef5d93a45c399454230a9ab7cad
   _flyoutIconGuid: 601f71555573dd84d818941931d400c9
   _clickEffectGuid: e3e8d7b74490adb4baa30e4822894eb7
