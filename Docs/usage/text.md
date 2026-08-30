@@ -73,9 +73,10 @@ FloatingTextMessage   ← TextFitterBackground: tracks the label
 | `Axis` | Which sides follow the label: `Horizontal`, `Vertical` or `Both`. |
 
 {% hint style="warning" %}
-Put the background **behind the label as a sibling**, not as its parent — unless the label uses
-centred anchors, as in the sketch above. A label *stretched* to a box that is itself tracking that
-label will resize the box, which resizes the label, and round they go.
+Put the background on **whichever object should end up the size of the label**. The label's parent
+is fine — that is the sketch above, and what the shipped `FloatingTextDefault.prefab` does. The one
+layout to avoid is a label *anchored to stretch* to the box: it would resize the box, which resizes
+the label, and round they go.
 {% endhint %}
 
 ## Wave Text — glyphs riding a sine wave

@@ -51,8 +51,9 @@ namespace vanhaodev.uimanager
 
         [Header("Backgrounds")]
         [Tooltip("Boxes drawn behind this label that grow with it — a panel, a glow, a ribbon. Each lands "
-                 + "on the label's size; its own artwork stretches out from there for padding. Sit them "
-                 + "behind the label as siblings rather than as its parent.")]
+                 + "on the label's size; its own artwork stretches out from there for padding. Put each on "
+                 + "whichever object should end up the size of the label — the label's parent is fine as "
+                 + "long as the label is not anchored to stretch to it.")]
         [SerializeField] private List<TextFitterBackground> _backgrounds = new();
 
         private TextMeshProUGUI _text;
@@ -92,7 +93,11 @@ namespace vanhaodev.uimanager
         private void OnValidate()
         {
             Cache();
-            Fit();
+
+            // Queued, not fitted here: writing the rect raises OnRectTransformDimensionsChange through
+            // SendMessage, which Unity forbids from inside OnValidate and answers with a console warning
+            // on every inspector edit. The deferral lands the same write just after OnValidate returns.
+            QueueFit();
         }
 #endif
 

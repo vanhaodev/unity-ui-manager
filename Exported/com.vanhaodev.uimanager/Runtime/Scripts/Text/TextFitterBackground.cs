@@ -15,8 +15,12 @@ namespace vanhaodev.uimanager
     /// side for a sliced sprite's border, authored by eye in the inspector rather than typed in as
     /// numbers, and free to differ per background.
     ///
-    /// Put it behind the label as a sibling. On the label's *parent* it would resize a label that
-    /// stretches to it, and that label would then resize it right back.
+    /// Sit it on whichever object should end up the size of the label. The label's *parent* is fine —
+    /// that is what the shipped FloatingTextDefault.prefab does, and for a floating text it is the right
+    /// call, since UIManager measures the ROOT when it nudges the label inside the screen edges and a
+    /// background on a separate sibling would leave that root at its authored size. The one layout to
+    /// avoid is a label anchored to *stretch* to the box: the box would resize the label, and that label
+    /// would then resize it right back.
     /// </summary>
     [ExecuteAlways]
     [RequireComponent(typeof(RectTransform))]
