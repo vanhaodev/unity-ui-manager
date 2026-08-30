@@ -36,6 +36,21 @@ ui.ShowFloatingText<FloatingTextAlbum>(
 
 The built-in `FloatingTextDefault` is ready to use for plain messages.
 
+## It sizes itself to the message
+
+`FloatingTextDefault` has no fixed width. A two-word message gets a small label; a long one widens,
+then wraps and deepens, and only past that does the font shrink and the tail get cut. So you can
+throw any string at it without checking the length first.
+
+That comes from a [`TextFitter`](text.md) on the label and a `TextFitterBackground` on the root —
+both plain components, so you can build the same behaviour into your own `FloatingText` subclass, or
+tune the limits on the prefab. Set the text through the fitter rather than assigning `.text`, so the
+label has its real size before the manager clamps it to the screen edges:
+
+```csharp
+public override void SetText(string message) => _fitter.SetText(message);
+```
+
 ## Keeps itself tidy
 
 * **No overlap** — labels from the same source are spaced out in time so they don't pile up.

@@ -58,6 +58,7 @@ That's the whole idea — **one call per piece of UI**. Each feature below build
 * [Loading Block](loading-block.md) — block input while something runs.
 * [Floating Text](floating-text.md) — pop-and-float labels.
 * [Flyout Effect](flyout.md) — icons that fly into a counter.
+* [Text](text.md) — labels that size themselves to their string, and text that moves.
 
 {% hint style="info" %}
 **Prefabs are reused, not re-created.** When you show a screen or popup the first time, UI Manager

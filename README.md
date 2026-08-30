@@ -33,6 +33,7 @@ No prefab wiring in code, no manual show/hide plumbing. Just call it.
 | 💬 | **Floating Text** | Pop-and-float labels ("+100", "Miss!") that space themselves and stay on screen. |
 | 🪙 | **Flyout Effect** | Coins/gems that burst and fly into a counter — app-driven count-up, any number format. |
 | 👆 | **Click Effect** | A ripple at every tap, anywhere on screen — snappy, responsive feel on mobile & PC. |
+| 🔤 | **Text** | Labels that size their box to the string — widen, wrap, shrink, ellipsize — plus wave & marquee. |
 
 ## 🚀 Why you'll like it
 

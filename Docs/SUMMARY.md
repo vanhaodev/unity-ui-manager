@@ -9,4 +9,5 @@
   * [Floating Text](usage/floating-text.md)
   * [Flyout Effect](usage/flyout.md)
   * [Click Effect](usage/click-effect.md)
+  * [Text](usage/text.md)
 * [Animation](animation.md)
