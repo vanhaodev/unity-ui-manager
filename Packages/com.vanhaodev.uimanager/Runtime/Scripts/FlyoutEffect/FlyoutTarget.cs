@@ -22,6 +22,13 @@ namespace vanhaodev.uimanager
                  "Alignment vs centre and the edge gap are configured globally in UILibrary > FlyoutConfig.")]
         [SerializeField] private RectTransform _aimPoint;
 
+        [Header("Arrival shake (strength/length: UILibrary > FlyoutConfig)")]
+        [Tooltip("Off = icons land without shaking anything.")]
+        [SerializeField] private bool _shakeOnArrival = true;
+        [Tooltip("Rect shaken when an icon lands. Empty = this object. Prefer one no layout group positions (a " +
+                 "field's inner content): a layout group re-places its children and fights the shake.")]
+        [SerializeField] private RectTransform _shakeRoot;
+
         private RectTransform _rectTransform;
         private UIManager _manager;
         private long _displayValue;
@@ -29,7 +36,6 @@ namespace vanhaodev.uimanager
         private bool _isLerping;
         private bool _isShaking;
         private float _shakeEndTime;
-        private Vector2 _originalAnchoredPos;
 
         public string Key => _key;
         public RectTransform RectTransform => _rectTransform;
@@ -91,11 +97,6 @@ namespace vanhaodev.uimanager
             _rectTransform = GetComponent<RectTransform>();
             if (_rectTransform == null)
                 _rectTransform = gameObject.AddComponent<RectTransform>();
-        }
-
-        private void Start()
-        {
-            _originalAnchoredPos = _rectTransform.anchoredPosition;
         }
 
         private void OnDisable()
@@ -171,35 +172,53 @@ namespace vanhaodev.uimanager
         }
 
         /// <summary>
-        /// Shake animation. Virtual for custom override.
+        /// The arrival shake with no icon flying in: a gain felt on the counter itself. <paramref name="duration"/>
+        /// is the whole shake — one arrival lasts only FlyoutConfig's ShakeDuration, and a flyout feels longer
+        /// because each landing icon extends it, so a caller standing in for a flyout passes the span of one.
+        /// Shares the arrival loop, so a call during one only extends it.
         /// </summary>
-        protected virtual async Awaitable ShakeAsync()
+        public void Shake(float duration) => RunShakeAsync(duration).Forget();
+
+        /// <summary>
+        /// The shake played when an icon lands. Virtual for custom override.
+        /// </summary>
+        protected virtual Awaitable ShakeAsync() => RunShakeAsync(Config != null ? Config.ShakeDuration : 0f);
+
+        private FlyoutConfig Config =>
+            _manager != null && _manager.Library != null ? _manager.Library.FlyoutConfig : null;
+
+        private async Awaitable RunShakeAsync(float duration)
         {
-            if (_manager == null) return;
+            var config = Config;
+            var root = _shakeRoot != null ? _shakeRoot : _rectTransform;
+            if (!_shakeOnArrival || config == null || root == null || duration <= 0f) return;
 
-            var config = _manager.Library?.FlyoutConfig;
-            if (config == null) return;
+            _shakeEndTime = Mathf.Max(_shakeEndTime, Time.time + duration);
 
-            // Extend shake end time
-            _shakeEndTime = Time.time + config.ShakeDuration;
-
-            // Already shaking loop running - it will pick up the extended time
+            // A loop already running picks up the extended end time, so icons landing together lengthen one
+            // shake instead of restarting it.
             if (_isShaking) return;
-
             _isShaking = true;
+
+            // Read now rather than at Start: by the time an icon lands, whatever positions this rect (a layout
+            // group) has had its pass, so this is the place it should return to.
+            var origin = root.anchoredPosition;
 
             try
             {
                 while (Time.time < _shakeEndTime)
                 {
-                    var offset = UnityEngine.Random.insideUnitCircle * config.ShakeIntensity;
-                    _rectTransform.anchoredPosition = _originalAnchoredPos + offset;
-                    await Awaitable.NextFrameAsync();
+                    root.anchoredPosition = origin + UnityEngine.Random.insideUnitCircle * config.ShakeIntensity;
+                    await Awaitable.NextFrameAsync(destroyCancellationToken);
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                // Destroyed mid-shake: nothing left to put back.
             }
             finally
             {
-                _rectTransform.anchoredPosition = _originalAnchoredPos;
+                if (root != null) root.anchoredPosition = origin;
                 _isShaking = false;
             }
         }

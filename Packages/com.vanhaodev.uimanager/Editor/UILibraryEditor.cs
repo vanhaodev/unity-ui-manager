@@ -14,7 +14,7 @@ namespace vanhaodev.uimanager.editor
 
         private static readonly string[] Tabs =
         {
-            "Screen", "Popup", "Toast", "Loading", "Floating", "Flyout", "Click", "Intro"
+            "Screen", "Popup", "Toast", "Loading", "Floating", "Flyout", "Click", "Intro", "Badge"
         };
 
         public override void OnInspectorGUI()
@@ -44,6 +44,8 @@ namespace vanhaodev.uimanager.editor
                     "_clickEffectConfig"); break;
                 case 7: Body("Boot logo that pops in, holds while the game loads under it, and leaves.",
                     "_introPrefab", "_introSortingOrder", "_introHoldSeconds"); break;
+                case 8: Body("Notification dot that ShowBadge(target) pins on any UI element.",
+                    "_badgePrefab", "_badgeAnchor", "_badgeOffset"); break;
             }
 
             serializedObject.ApplyModifiedProperties();

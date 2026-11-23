@@ -27,6 +27,19 @@ namespace vanhaodev.uimanager
         private TMP_Text _text;
         private bool _isPlaying = true;
 
+        /// <summary>True while the label ripples. A freshly added WaveText plays; call <see cref="Stop"/> to
+        /// start it still.</summary>
+        public bool IsPlaying => _isPlaying;
+
+        /// <summary>How fast the wave travels — for a WaveText added from code, where the Inspector is not.</summary>
+        public float Speed { get => _speed; set => _speed = value; }
+
+        /// <summary>How far a glyph rides above and below the baseline, in local units.</summary>
+        public float Amplitude { get => _amplitude; set => _amplitude = value; }
+
+        /// <summary>Phase pushed onto each successive glyph.</summary>
+        public float Frequency { get => _frequency; set => _frequency = value; }
+
         private void Awake() => _text = GetComponent<TMP_Text>();
 
         /// <summary>Start rippling, optionally swapping the string first.</summary>
@@ -51,7 +64,9 @@ namespace vanhaodev.uimanager
             if (_text != null) _text.ForceMeshUpdate();
         }
 
-        private void Update()
+        // LateUpdate, so the wave is applied AFTER whatever set the text this frame: a label rewritten mid-frame
+        // (a live counter) regenerates its mesh, and a wave written before that would be thrown away.
+        private void LateUpdate()
         {
             if (!_isPlaying || _text == null) return;
 
@@ -82,6 +97,7 @@ namespace vanhaodev.uimanager
             // One push per material — a label with a fallback font or a sprite spans more than one mesh.
             for (int i = 0; i < meshInfo.Length; i++)
             {
+                if (meshInfo[i].mesh == null) continue;
                 meshInfo[i].mesh.vertices = meshInfo[i].vertices;
                 _text.UpdateGeometry(meshInfo[i].mesh, i);
             }

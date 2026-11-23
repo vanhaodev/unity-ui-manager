@@ -17,6 +17,7 @@ namespace vanhaodev.uimanager
             ClearFloatingTextCache();
             ClearFlyoutCache();
             ClearClickEffectCache();
+            ClearBadgeCache();
         }
 
         public void SetLibrary(UILibrary library)

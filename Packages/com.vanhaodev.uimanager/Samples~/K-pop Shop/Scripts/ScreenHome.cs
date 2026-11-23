@@ -57,6 +57,9 @@ namespace vanhaodev.uimanager.samples.kpopshop
         private UserManager _userManager;
         private UIManager _uiManager;
         private bool _isShowWelcome = false;
+
+        // The notification dot on the Shop button says "new albums in stock" until the shop has been opened once.
+        private static bool _shopVisited;
         protected override void Awake()
         {
             base.Awake();
@@ -96,6 +99,10 @@ namespace vanhaodev.uimanager.samples.kpopshop
             RefreshPurchasedItems();
             InitMoney();
             PreloadTestAlbumCovers();
+
+            // The dot is pinned on the button by the manager (UILibrary > Badge) — nothing placed in the prefab.
+            if (_btnShop != null && _uiManager != null)
+                _uiManager.SetBadge((RectTransform)_btnShop.transform, !_shopVisited);
         }
 
         public override void OnExit()
@@ -115,7 +122,12 @@ namespace vanhaodev.uimanager.samples.kpopshop
 
         private void OnShopClicked()
         {
-            FindFirstObjectByType<UIManager>()?.ShowScreen<ScreenShop>();
+            _shopVisited = true;
+            _uiManager ??= FindFirstObjectByType<UIManager>();
+            if (_uiManager == null) return;
+
+            _uiManager.HideBadge((RectTransform)_btnShop.transform);
+            _uiManager.ShowScreen<ScreenShop>();
         }
 
         // Warm the sprite cache so spam-clicking the test button shows covers instantly.

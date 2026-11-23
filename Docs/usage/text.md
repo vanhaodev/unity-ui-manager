@@ -98,6 +98,18 @@ _wave.Stop();              // settle the letters back onto the baseline
 | `Amplitude` | 3 | How far a glyph rides above and below the baseline. |
 | `Frequency` | 0.6 | Phase pushed onto each glyph — higher packs more letters per crest. |
 
+The three settings are also properties, for a `WaveText` added from code. A freshly added one plays, so
+call `Stop()` straight away if it should start still:
+
+```csharp
+var wave = label.gameObject.AddComponent<WaveText>();
+wave.Amplitude = 4f;
+wave.Stop();               // ripples only once Play() is called
+```
+
+The wave is applied in `LateUpdate`, after anything that rewrites the text earlier in the frame (a live
+counter), so it never drops a frame.
+
 {% hint style="info" %}
 Always `Stop()` rather than just disabling it: the offsets are baked into the vertices, so halting
 mid-wave would freeze the last frame's ripple into the label. `Stop()` rebuilds the mesh once on the

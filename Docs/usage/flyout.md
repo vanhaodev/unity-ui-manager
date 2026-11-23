@@ -134,6 +134,48 @@ Use `onComplete` only for **side effects** that should run once the batch finish
 new balance to your data. The displayed number is still driven by `OnIconArrived` above, so the two
 stay in sync. `OnBatchComplete` is also available if you just need a "batch done" callback.
 
+### The ready-made way — FlyoutCounter
+
+`FlyoutCounter` does the above for you, and also handles the cases that are easy to get wrong:
+
+* a **gain** is held and ticks up as icons land, then snaps to the exact total when the batch ends;
+* a **spend** (or any decrease) shows at once;
+* a gain that never gets icons (granted outside a reward animation) snaps after a short timeout, so it
+  still shows up;
+* two batches in the air at once never count past the real total.
+
+Feed it the real value and render whatever it hands back:
+
+```csharp
+private FlyoutCounter _gold;
+
+private void Awake()
+{
+    _gold = new FlyoutCounter(_goldTarget, (value, instant) => _goldLabel.text = value.ToString());
+}
+
+private void OnEnable()  { _gold.Enable(); _gold.SetActual(wallet.Gold, initial: true); }
+private void OnDisable() => _gold.Disable();
+private void Update()    => _gold.Tick();
+
+// Whenever the wallet changes:
+_gold.SetActual(wallet.Gold);
+```
+
+`instant` is `true` when the value should snap (first sync, a spend, the end of a batch), so a label
+with its own count-up animation can skip it.
+
+## The arrival shake
+
+Each landing icon shakes the target. Strength and length come from **Shake Intensity** and **Shake
+Duration** in the Flyout Config; icons landing close together stretch one shake instead of restarting it.
+
+* **Shake Root** — the rect that shakes. Empty = the target itself. If the target sits in a layout group,
+  point this at an inner rect the group does not position (the field's content): a layout group re-places
+  its children and fights the shake.
+* **Shake On Arrival** — untick to land icons without shaking anything.
+* `Shake(duration)` — play the shake with no icon flying in, e.g. for a gain felt on the counter itself.
+
 ## Formatting the number
 
 Set `Formatter` once to control how the value is displayed — any style your game needs
@@ -188,6 +230,7 @@ Need a pixel-perfect spot? Drop an empty child where you want icons to hit and a
 | `OnIconArrived` | `event Action<int>` — fired per icon arrival with its value. |
 | `OnBatchComplete` | `event Action` — fired once when all icons in a batch arrive. |
 | `Key` | The lookup key for this target. |
+| `Shake(float duration)` | Play the arrival shake with no icon flying in. |
 
 ### Config reference
 

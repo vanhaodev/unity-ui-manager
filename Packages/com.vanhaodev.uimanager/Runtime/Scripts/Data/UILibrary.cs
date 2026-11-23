@@ -44,6 +44,15 @@ namespace vanhaodev.uimanager
                  "Match it to the logo sound's length and the logo leaves as the sound ends.")]
         [SerializeField] private float _introHoldSeconds = 1f;
 
+        [Tooltip("Notification dot that ShowBadge(target) puts on a UI element (a UIAttentionBadge on a " +
+                 "RectTransform root, pivot at its centre). Leave null for no badges.")]
+        [SerializeField] private UIAttentionBadge _badgePrefab;
+        [Tooltip("Where on the target the dot is pinned, in the target's own rect: (1,1) = top-right corner, " +
+                 "(0.5,0.5) = centre.")]
+        [SerializeField] private Vector2 _badgeAnchor = new Vector2(1f, 1f);
+        [Tooltip("Nudge from that point, in the target's local units (e.g. (-8,-8) pulls the dot inside the corner).")]
+        [SerializeField] private Vector2 _badgeOffset = Vector2.zero;
+
         private Dictionary<Type, BaseScreen> _screenCache;
         private Dictionary<Type, BasePopup> _popupCache;
         private Dictionary<Type, BaseToast> _toastCache;
@@ -62,6 +71,9 @@ namespace vanhaodev.uimanager
         public IntroView IntroPrefab => _introPrefab;
         public int IntroSortingOrder => _introSortingOrder;
         public float IntroHoldSeconds => _introHoldSeconds;
+        public UIAttentionBadge BadgePrefab => _badgePrefab;
+        public Vector2 BadgeAnchor => _badgeAnchor;
+        public Vector2 BadgeOffset => _badgeOffset;
 
         private void OnEnable()
         {
@@ -134,6 +146,7 @@ namespace vanhaodev.uimanager
         [SerializeField, HideInInspector] private string _flyoutIconGuid;
         [SerializeField, HideInInspector] private string _clickEffectGuid;
         [SerializeField, HideInInspector] private string _introGuid;
+        [SerializeField, HideInInspector] private string _badgeGuid;
 
         /// <summary>True if any prefab list has a missing (null) slot that could be restored.</summary>
         public bool HasMissingPrefabReferences()
@@ -157,6 +170,7 @@ namespace vanhaodev.uimanager
             changed |= SyncGuid(_flyoutIconPrefab, ref _flyoutIconGuid);
             changed |= SyncGuid(_clickEffectConfig?.Prefab, ref _clickEffectGuid);
             changed |= SyncGuid(_introPrefab, ref _introGuid);
+            changed |= SyncGuid(_badgePrefab, ref _badgeGuid);
             return changed;
         }
 
@@ -175,6 +189,8 @@ namespace vanhaodev.uimanager
                 _clickEffectConfig.Prefab = LoadByGuid<BaseClickEffect>(_clickEffectGuid);
             if (_introPrefab == null)
                 _introPrefab = LoadByGuid<IntroView>(_introGuid);
+            if (_badgePrefab == null)
+                _badgePrefab = LoadByGuid<UIAttentionBadge>(_badgeGuid);
 
             // Force the type→prefab caches to rebuild from the restored lists.
             _screenCache = null; _popupCache = null; _toastCache = null;

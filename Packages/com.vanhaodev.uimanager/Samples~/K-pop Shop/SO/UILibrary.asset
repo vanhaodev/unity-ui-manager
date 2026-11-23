@@ -56,6 +56,9 @@ MonoBehaviour:
   _introPrefab: {fileID: 4410000000000000006, guid: ea88e97a8fbe5fd46b8af8f9994913a8, type: 3}
   _introSortingOrder: 1000
   _introHoldSeconds: 1
+  _badgePrefab: {fileID: 5520000000000000005, guid: dd03d2f3607d46c4dbf51078f1f6a69d, type: 3}
+  _badgeAnchor: {x: 1, y: 1}
+  _badgeOffset: {x: -12, y: -12}
   _screenGuids:
   - 96e04273b1b85524aa6f2d290e5e4302
   - 35c915b3bd3047c4f8fff76f9ad3fa35
@@ -73,3 +76,4 @@ MonoBehaviour:
   _flyoutIconGuid: 601f71555573dd84d818941931d400c9
   _clickEffectGuid: e3e8d7b74490adb4baa30e4822894eb7
   _introGuid: ea88e97a8fbe5fd46b8af8f9994913a8
+  _badgeGuid: dd03d2f3607d46c4dbf51078f1f6a69d
