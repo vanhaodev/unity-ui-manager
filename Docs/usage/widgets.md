@@ -1,61 +1,11 @@
 ---
-description: Notification dots, tabs, scroll helpers, safe-area bars and drag & drop.
+description: Tabs, scroll helpers, safe-area bars and drag & drop.
 ---
 
 # Widgets
 
-Small components for your own UI. Only the notification dot goes through the UIManager; the rest are
-standalone.
-
-## Notification Dot — `ui.ShowBadge(target)`
-
-The dot that says "something here is waiting for you" (a reward to claim, an unread message). While it is
-shown it wobbles now and then and gently swells and shrinks.
-
-You do not place dots in your prefabs. Point the manager at any UI element and it pins the dot there:
-
-```csharp
-var shopButton = (RectTransform)_btnShop.transform;
-
-ui.ShowBadge(shopButton);                       // dot on
-ui.HideBadge(shopButton);                       // dot off
-ui.SetBadge(shopButton, hasNewItems);           // on or off, for a refresh that recomputes it each time
-bool shown = ui.IsBadgeShown(shopButton);
-```
-
-### Setup
-
-Open your UILibrary, **Badge** tab:
-
-* **Badge Prefab** — the dot. Use the built-in `AttentionBadgeDefault` (a red circle) or your own prefab
-  with a `UIAttentionBadge` on a RectTransform root, pivot at its centre.
-* **Badge Anchor** — where on the target the dot is pinned, in the target's own rect: `(1, 1)` = top-right
-  corner (default), `(0.5, 0.5)` = centre.
-* **Badge Offset** — a nudge from that point, e.g. `(-12, -12)` pulls the dot inside the corner.
-
-The first show creates the dot as a child of the target. Later calls reuse it, so calling `SetBadge` on
-every refresh costs nothing. The dot is drawn over the target's other children, a layout group on the
-target ignores it, and it is destroyed together with its target. A `Mask` on the target clips it, so pin
-it to an element without one.
-
-### The dot's motion
-
-These settings are on the `UIAttentionBadge` component of the badge prefab. The motion runs on unscaled
-time, so it keeps moving on a popup opened over a paused game.
-
-| Setting | Default | What it does |
-| --- | --- | --- |
-| `Angle` | 15 | Peak tilt of one wobble, in degrees. |
-| `Wobble Duration` | 0.5 | How long one wobble lasts. |
-| `Rest Duration` | 1.2 | Pause between two wobbles. `0` = wobble non-stop. |
-| `Bubble` | on | Off = the dot keeps its size. |
-| `Bubble Scale` | 1.15 | Size at the top of a swell (1 = no swell). |
-| `Bubble Duration` | 0.45 | One swell or one shrink. |
-
-{% hint style="info" %}
-**When** a dot shows is your game's call. For example, a "seen it this session" rule belongs in your code:
-the badge only shows, hides and moves.
-{% endhint %}
+Small standalone components for your own UI. Looking for notification dots? See
+[Notification Dot](badge.md).
 
 ## Tab Group — `UITabGroup` + `UITab`
 

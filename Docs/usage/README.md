@@ -62,7 +62,8 @@ That's the whole idea — **one call per piece of UI**. Each feature below build
 * [Flyout Effect](flyout.md) — icons that fly into a counter.
 * [Click Effect](click-effect.md) — a ripple at every tap, anywhere on screen.
 * [Intro](intro.md) — a boot logo that plays while the game loads.
-* [Widgets](widgets.md) — notification dots, tabs, scroll helpers, safe-area bars, drag & drop.
+* [Notification Dot](badge.md) — a dot the manager pins on any element: "something here is waiting".
+* [Widgets](widgets.md) — tabs, scroll helpers, safe-area bars, drag & drop.
 * [Text](text.md) — labels that size themselves to their string, and text that moves.
 
 {% hint style="info" %}

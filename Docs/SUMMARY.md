@@ -11,5 +11,6 @@
   * [Click Effect](usage/click-effect.md)
   * [Text](usage/text.md)
   * [Intro](usage/intro.md)
+  * [Notification Dot](usage/badge.md)
   * [Widgets](usage/widgets.md)
 * [Animation](animation.md)

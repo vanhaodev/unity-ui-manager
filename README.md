@@ -35,7 +35,8 @@ No prefab wiring in code, no manual show/hide plumbing. Just call it.
 | 👆 | **Click Effect** | A ripple at every tap, anywhere on screen — snappy, responsive feel on mobile & PC. |
 | 🎬 | **Intro** | A boot logo that pops in, holds while your game loads under it, and leaves. |
 | 🔤 | **Text** | Labels that size their box to the string — widen, wrap, shrink, ellipsize — plus wave & marquee. |
-| 🔴 | **Widgets** | Notification dots, tab groups, nested scrolls, safe-area bars, drag & drop. |
+| 🔴 | **Notification Dot** | `ShowBadge(target)` pins a wobbling "something's waiting" dot on any element — nothing placed in prefabs. |
+| 🧩 | **Widgets** | Tab groups, nested scrolls, fill-the-viewport content, safe-area bars, drag & drop. |
 
 ## 🚀 Why you'll like it
 
