@@ -3,11 +3,12 @@
 Fast map of the package so you can locate code without re-scanning. Not a GitBook page (kept out of
 `SUMMARY.md`). Update it when structure/conventions change.
 
-/ **Source of truth:** `Assets/com.vanhaodev.uimanager/`. `Exported/com.vanhaodev.uimanager/` is a
-verbatim mirror (identical GUIDs) that users install — only synced at release time, see
-[`release-export-guide.md`](release-export-guide.md). **Edit `Assets/`, never `Exported/` by hand.**
+**Source of truth:** `Packages/com.vanhaodev.uimanager/` — an embedded package, installed by users straight
+from git (`?path=Packages/com.vanhaodev.uimanager#<ver>`); no mirror to sync. Samples live in its
+`Samples~/` and are worked on as an imported, git-ignored copy under `Assets/Samples/` — see
+[`release-guide.md`](release-guide.md).
 
-## Layout — `Assets/com.vanhaodev.uimanager/Runtime/Scripts/`
+## Layout — `Packages/com.vanhaodev.uimanager/Runtime/Scripts/`
 
 | Area | Path | Notes |
 | --- | --- | --- |
@@ -26,7 +27,8 @@ verbatim mirror (identical GUIDs) that users install — only synced at release 
 | Wave text | `Text/WaveText.cs` | Rolls a sine wave through a label's glyphs, each character a little later than the one before. Writes the vertex buffer, not the transform, so letters move independently; regenerates the mesh every frame because the offsets bake in. `Stop()` rebuilds once on the way out, otherwise the last frame's wave freezes into the label. Never touches the layout box. |
 | Text fitting | `Text/TextFitter.cs`, `Text/TextFitterBackground.cs` | `TextFitter` sits on a TMP label and sizes its box to the string, spending width then height then the font: hug at Font Size Max → stop at Max Width and wrap, the box deepening → stop at Max Height and shrink the font → ellipsize at the minimum. The middle rung is `_fitVertical` (opt-in); with it off the height stays as authored and Max Width leads straight to shrinking. Auto sizing therefore turns on only when *both* axes are spent (`tooWide && tooTall`) under vertical fit, but on *either* (`||`) without it. It owns the TMP font settings rather than reading them; overflow and word wrapping are only *borrowed* — `Cache()` snapshots both before the first fit and each is handed back once no longer needed. It also refits only when the string actually changed, so a per-frame mesh rebuild (`WaveText` on the same label) or its own box resize does not retrigger it. `TextFitterBackground` sits on a box behind the label and takes the label's size on its chosen axis — the fitter holds the list and pushes size out one way, never reading back. No padding on the background: its artwork is a stretched child whose offsets are the padding. The background goes on whichever object should end up the size of the label — the label's *parent* is fine, and is what `FloatingTextDefault` does; the only layout that loops is a label anchored to *stretch* to the box. Editor gotcha: `OnValidate` must queue the fit (`QueueFit()`), never call `Fit()` — writing the rect there raises `OnRectTransformDimensionsChange` via `SendMessage`, which Unity forbids inside `OnValidate` and answers with a console warning on every inspector edit. |
 | Editor | `Editor/` (own asmdef) | `UILibraryEditor` — tabbed IMGUI inspector (one tab/feature) + a "Reload missing prefab references" button. UILibrary keeps an editor-only GUID snapshot (`#if UNITY_EDITOR`) auto-synced while healthy; Reload refills dropped (`None`) list slots by index. |
-| Sample | `Samples/K-pop Shop/` | Working example of every feature. |
+| Intro | `Intro/`, `Manager/UIManager.Intro.cs` | Boot logo. **One** prefab on UILibrary (`_introPrefab` + `_introSortingOrder` + `_introHoldSeconds`, tab "Intro"), not a typed list. **Not parented to a layer, not cached**: `IntroView.Create()` makes its own overlay Canvas (sortingOrder override, DontDestroyOnLoad, no raycasts) and it destroys itself after hiding — it must outlive scene loads and sit above any loading screen. `ui.ShowIntro()` → `IntroSequence` (manual), `ui.PlayIntro(Func<Task> work)` (work started before the pop; hides in `finally`, swallowing only cancellation). `IntroSequence`: steady-frame wait → pop → hold → hide, unscaled/realtime, token linked to the view's destroy token; drives `IntroView` without needing the manager. Motion = an `IIntroAnimation` component on the prefab (none → `DefaultIntroAnimation`, AnimationCurve, no tween lib). Sound = `IIntroCueHandler` components get `IntroCue` AppearStart/Bounce/HideStart; the library plays no audio. Script GUIDs come from the Reversi game's former `vanhaodev.intro` module — keep them, the game's prefabs reference them. |
+| Sample | `Samples~/K-pop Shop/` | Working example of every feature. Intro: `Prefabs/Intro.prefab` (bg + coloured square logo, `IntroCueLogger` logs cues); `GameUI.Start` shows Home then `await PlayIntro()`. |
 
 ## How a feature is wired
 
@@ -48,6 +50,11 @@ Show/close flow: `UIElement.Show/Close` → `OnShowStart`→ animation → `OnSh
 
 ## Conventions / gotchas
 
+- **No new third-party libs.** Runtime and samples use only what the package already depends on
+  (objectpool, Input System; DOTween stays inside the K-pop sample). When porting code from a game
+  (e.g. its intro with Coffee UIEffect / DOTween), strip those parts — ask the maintainer before
+  adding any dependency.
+
 - **App owns numbers.** Flyout icons are visual only; the displayed value is driven by the app via
   `FlyoutTarget.SetTargetValue` + `OnIconArrived`. Don't make the library mutate counters.
 - **Cross-canvas camera rule (flyout/floating text).** world→screen must use the camera of the
@@ -61,7 +68,7 @@ Show/close flow: `UIElement.Show/Close` → `OnShowStart`→ animation → `OnSh
   references `Unity.InputSystem`; legacy-only projects without the package compile fine (one harmless
   unresolved-reference warning) and use the legacy branch.
 - **No auto-discovery:** `FlyoutTarget` must be `Register(manager)`ed by the app (unregisters on destroy).
-- **Versioning:** version lives in 4 places — see [`release-export-guide.md`](release-export-guide.md).
+- **Versioning:** version lives in 3 files (package.json, `Docs/README.md`, root `README.md`) — see [`release-guide.md`](release-guide.md).
 
 ## User-facing docs
 

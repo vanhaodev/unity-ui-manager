@@ -290,6 +290,12 @@
       "dependencies": {},
       "hash": "e9c5ec23aed928a0b5738d512c70f8207efda730"
     },
+    "com.vanhaodev.uimanager": {
+      "version": "file:com.vanhaodev.uimanager",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,

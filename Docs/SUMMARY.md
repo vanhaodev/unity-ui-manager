@@ -10,4 +10,5 @@
   * [Flyout Effect](usage/flyout.md)
   * [Click Effect](usage/click-effect.md)
   * [Text](usage/text.md)
+  * [Intro](usage/intro.md)
 * [Animation](animation.md)

@@ -23,6 +23,7 @@ your UI prefabs, grouped by kind:
 * **Toasts** — small messages that appear and fade.
 * **Loading Blocks** — the "please wait" overlay.
 * **Floating Texts** — little labels that pop and float (e.g. "+100").
+* **Intro** — the boot logo (a single prefab, not a list).
 
 Drag each prefab into the matching list. UI Manager finds the right prefab by its **type**, so you
 never reference prefabs from code.
@@ -59,6 +60,7 @@ That's the whole idea — **one call per piece of UI**. Each feature below build
 * [Floating Text](floating-text.md) — pop-and-float labels.
 * [Flyout Effect](flyout.md) — icons that fly into a counter.
 * [Click Effect](click-effect.md) — a ripple at every tap, anywhere on screen.
+* [Intro](intro.md) — a boot logo that plays while the game loads.
 * [Text](text.md) — labels that size themselves to their string, and text that moves.
 
 {% hint style="info" %}

@@ -5,7 +5,7 @@
 **One manager for every piece of your game's UI — screens, popups, toasts, effects — with smooth animations and zero boilerplate.**
 
 [![Unity](https://img.shields.io/badge/Unity-6000.0%2B-black?logo=unity)](https://unity.com/)
-[![Version](https://img.shields.io/badge/version-1.0.8-blue)](https://github.com/vanhaodev/unity-ui-manager/releases)
+[![Version](https://img.shields.io/badge/version-1.0.9-blue)](https://github.com/vanhaodev/unity-ui-manager/releases)
 [![Docs](https://img.shields.io/badge/docs-gitbook-brightgreen)](https://vanhaodev.gitbook.io/ui-manager)
 
 </div>
@@ -33,6 +33,7 @@ No prefab wiring in code, no manual show/hide plumbing. Just call it.
 | 💬 | **Floating Text** | Pop-and-float labels ("+100", "Miss!") that space themselves and stay on screen. |
 | 🪙 | **Flyout Effect** | Coins/gems that burst and fly into a counter — app-driven count-up, any number format. |
 | 👆 | **Click Effect** | A ripple at every tap, anywhere on screen — snappy, responsive feel on mobile & PC. |
+| 🎬 | **Intro** | A boot logo that pops in, holds while your game loads under it, and leaves. |
 | 🔤 | **Text** | Labels that size their box to the string — widen, wrap, shrink, ellipsize — plus wave & marquee. |
 
 ## 🚀 Why you'll like it
@@ -51,7 +52,7 @@ Requires **Unity 6+**. Add both packages via **Package Manager → Add package f
 
 ```
 https://github.com/vanhaodev/unity-object-pool.git?path=Exported/com.vanhaodev.objectpool#1.0.1
-https://github.com/vanhaodev/unity-ui-manager.git?path=Exported/com.vanhaodev.uimanager#1.0.8
+https://github.com/vanhaodev/unity-ui-manager.git?path=Packages/com.vanhaodev.uimanager#1.0.9
 ```
 
 Then import the **K-pop Shop** sample (Package Manager → UI Manager → Samples) to see every feature in action.
